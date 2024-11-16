@@ -9,6 +9,7 @@ import {
 	SignedOut,
 	UserButton,
 } from "@clerk/nextjs";
+import { Toaster } from "sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -35,6 +36,7 @@ export default function RootLayout({
 			<html lang="en">
 				<body className={inter.className}>
 					<AppProviders>{children}</AppProviders>
+					<Toaster richColors />
 				</body>
 			</html>
 		</ClerkProvider>

@@ -17,7 +17,7 @@ interface Props {
 
 function CustomDialogHeader(props: Props) {
 	return (
-		<DialogHeader className="py-6">
+		<DialogHeader className="py-4">
 			<DialogTitle>
 				<div className="flex flex-col items-center gap-2 mb-2">
 					{props.icon && (

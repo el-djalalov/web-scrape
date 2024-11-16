@@ -1,3 +1,3 @@
-export function waitFow(ms: number) {
+export function waitFor(ms: number) {
 	return new Promise(resolve => setTimeout(resolve, ms));
 }
