@@ -18,7 +18,7 @@ interface Props {
 function Topbar({ title, subtitle, workflowId }: Props) {
 	const router = useRouter();
 	return (
-		<header className="flex px-4 border-p-2 border-separate justify-between w-full h-[60px] sticky top-0 bg-background z-10">
+		<header className="flex px-4 border-b-2 border-separate justify-between w-full h-[60px] sticky top-0 bg-background z-10">
 			<div className="flex justify-between w-full items-center">
 				<div className="flex items-center justify-center gap-2">
 					<TooltipWrapper content="Go back workflows">

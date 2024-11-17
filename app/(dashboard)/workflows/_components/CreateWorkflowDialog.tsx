@@ -2,7 +2,13 @@
 
 import CustomDialogHeader from "@/components/CustomDialogHeader";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import {
+	Dialog,
+	DialogContent,
+	DialogTrigger,
+	DialogHeader,
+	DialogTitle,
+} from "@/components/ui/dialog";
 import {
 	createWorkflowSchema,
 	createWorkflowSchemaType,
@@ -27,6 +33,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useMutation } from "@tanstack/react-query";
 import { CreateWorkflow } from "@/actions/workflows/createWorkflow";
 import { toast } from "sonner";
+import { Separator } from "@/components/ui/separator";
 
 function CreateWorkflowDialog({ triggerText }: { triggerText?: string }) {
 	const [open, setOpen] = useState(false);
@@ -69,15 +76,27 @@ function CreateWorkflowDialog({ triggerText }: { triggerText?: string }) {
 			<DialogTrigger asChild>
 				<Button> {triggerText ?? "Create workflow"}</Button>
 			</DialogTrigger>
-			<DialogContent
-				className="px-0"
-				aria-describedby="workflow description form"
-			>
-				<CustomDialogHeader
+			<DialogContent className="px-0">
+				<DialogHeader className="py-4">
+					<DialogTitle>
+						<div className="flex flex-col items-center gap-2 mb-2">
+							<Layers2Icon size={30} className="stroke-primary" />
+
+							<p className="text-primary text-xl">Create workflow</p>
+
+							<p className="text-sm text-muted-foreground">
+								Start building your workflow
+							</p>
+						</div>
+					</DialogTitle>
+					<Separator />
+				</DialogHeader>
+				{/* 		<CustomDialogHeader
 					icon={Layers2Icon}
 					title="Create workflow"
 					subTitle="Start building your workflow"
-				/>
+				/> */}
+
 				<div className="px-6">
 					<Form {...form}>
 						<form

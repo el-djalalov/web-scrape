@@ -1,3 +1,5 @@
+"use client";
+
 import BreadCrumbHeader from "@/components/BreadCrumbHeader";
 import DesktopSidebar from "@/components/Sidebar";
 import { ModeToggle } from "@/components/ThemeModeToggle";

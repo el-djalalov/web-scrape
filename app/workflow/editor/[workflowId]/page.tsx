@@ -9,8 +9,6 @@ async function page({ params }: { params: { workflowId: string } }) {
 	const { userId } = await auth();
 	if (!userId) return <div>Unauthenticated</div>;
 
-	await waitFor(5000);
-
 	const workflow = await prisma.workflow.findUnique({
 		where: {
 			id: workflowId,

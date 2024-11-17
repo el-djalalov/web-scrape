@@ -108,11 +108,11 @@ function WorkflowActions({
 			<DropdownMenu>
 				<DropdownMenuTrigger asChild>
 					<Button variant={"outline"} size={"sm"}>
-						<TooltipWrapper content={"More actions"}>
-							<div className="flex items-center justify-center w-full h-full">
-								<MoreVerticalIcon size={18} />
-							</div>
-						</TooltipWrapper>
+						{/* <div className="flex items-center justify-center w-full h-full"> */}
+							{/* 	<TooltipWrapper content={"More actions"}> */}
+							<MoreVerticalIcon size={18} />
+							{/* </TooltipWrapper> */}
+					{/* 	</div> */}
 					</Button>
 				</DropdownMenuTrigger>
 				<DropdownMenuContent align="end">

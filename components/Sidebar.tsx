@@ -1,4 +1,5 @@
 "use client";
+
 import {
 	CoinsIcon,
 	HomeIcon,
@@ -38,7 +39,6 @@ const routes = [
 ];
 function DesktopSidebar() {
 	const pathname = usePathname();
-	console.log(pathname);
 
 	const activeRoute =
 		routes.find(route => route.href !== "/" && pathname.includes(route.href)) ||
