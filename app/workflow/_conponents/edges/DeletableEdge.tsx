@@ -8,6 +8,7 @@ import {
 	getSmoothStepPath,
 	useReactFlow,
 } from "@xyflow/react";
+import { Delete, DeleteIcon, XIcon } from "lucide-react";
 import React from "react";
 
 function DeletableEdge(props: EdgeProps) {
@@ -25,7 +26,7 @@ function DeletableEdge(props: EdgeProps) {
 				<div
 					style={{
 						position: "absolute",
-						transform: `translate(-50%, 50%) translate(${labelX}px, ${labelY}px )`,
+						transform: `translate(-50%, -50%) translate(${labelX}px, ${labelY}px )`,
 						pointerEvents: "all",
 					}}
 				>
@@ -37,7 +38,7 @@ function DeletableEdge(props: EdgeProps) {
 							setEdges(edges => edges.filter(edge => edge.id !== props.id));
 						}}
 					>
-						X
+						<XIcon />
 					</Button>
 				</div>
 			</EdgeLabelRenderer>
