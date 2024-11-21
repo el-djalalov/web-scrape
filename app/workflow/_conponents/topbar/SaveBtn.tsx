@@ -24,7 +24,7 @@ function SaveBtn({ workflowId }: { workflowId: string }) {
 		<Button
 			disabled={saveMutation.isPending}
 			variant={"secondary"}
-			className="flex items-center gap-2"
+			className="flex items-center gap-2 hover:!bg-inherit-200/90 border"
 			onClick={() => {
 				const workflowDefination = JSON.stringify(toObject());
 				toast.loading("Saving worklfow...", { id: "save-workflow" });
