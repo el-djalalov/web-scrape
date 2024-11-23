@@ -2,7 +2,7 @@ import { waitFor } from "@/lib/helper/waitFor";
 import prisma from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import React from "react";
-import Editor from "../../_conponents/Editor";
+import Editor from "../../_components/Editor";
 
 async function page({ params }: { params: { workflowId: string } }) {
 	const { workflowId } = params;

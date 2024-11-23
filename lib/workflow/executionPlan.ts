@@ -36,7 +36,6 @@ export function FlowToExecutionPlan(
 
 	const inputsWithErrors: AppNodeMissingInputs[] = [];
 	const planned = new Set<string>();
-
 	const invalidInputs = getInvalidInputs(entryPoint, edges, planned);
 
 	if (invalidInputs.length > 0) {
