@@ -16,7 +16,7 @@ export const PageToHtmlTask = {
 			type: TaskParamType.BROWSER_INTANCE,
 			required: true,
 		},
-	],
+	] as const,
 	outputs: [
 		{
 			name: "Html",
@@ -26,5 +26,5 @@ export const PageToHtmlTask = {
 			name: "Web page",
 			type: TaskParamType.BROWSER_INTANCE,
 		},
-	],
+	] as const,
 } satisfies WorkflowTask;

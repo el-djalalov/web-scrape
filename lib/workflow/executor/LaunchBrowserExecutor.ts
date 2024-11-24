@@ -9,13 +9,16 @@ export async function LaunchBrowserExecutor(
 	let browser;
 	try {
 		const websiteUrl = environment.getInput("Website Url");
-		browser = await puppeteer.launch({ headless: false }); // This will keep browser open
-		await waitFor(3000);
-	} catch (error) {
-		console.log(error);
+		browser = await puppeteer.launch({ headless: true });
+		environment.log.info("Browser started successfully");
+		environment.setBrowser(browser);
+		const page = await browser.newPage();
+		await page.goto(websiteUrl);
+		environment.setPage(page);
+		environment.log.info(`Opened page at: ${websiteUrl}`);
+		return true;
+	} catch (error: any) {
+		environment.log.error(error.message);
 		return false;
-	} finally {
-		browser?.close();
 	}
-	return true;
 }
