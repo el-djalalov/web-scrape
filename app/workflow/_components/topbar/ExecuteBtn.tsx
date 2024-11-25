@@ -25,6 +25,7 @@ function ExecuteBtn({ workflowId }: { workflowId: string }) {
 	});
 	return (
 		<Button
+			size={"sm"}
 			variant={"outline"}
 			className="flex items-center gap-2 !bg-green-400  hover:!bg-green-400/80 dark:text-black border"
 			disabled={mutation.isPending}

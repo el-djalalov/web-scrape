@@ -9,6 +9,7 @@ import React from "react";
 import SaveBtn from "./SaveBtn";
 import { Separator } from "@/components/ui/separator";
 import ExecuteBtn from "./ExecuteBtn";
+import NavigationTabs from "./NavigationTabs";
 
 interface Props {
 	title: string;
@@ -20,8 +21,8 @@ interface Props {
 function Topbar({ title, subtitle, workflowId, hideButtons = false }: Props) {
 	const router = useRouter();
 	return (
-		<header className="flex px-4 border-b-2 border-separate justify-between w-full h-[60px] sticky top-0 bg-background z-10">
-			<div className="flex justify-between w-full items-center">
+		<header className="flex px-4 py-2 border-b-2 border-separate justify-between w-full h-[60px]! sticky top-0 bg-background z-10">
+			<div className="flex w-full items-center justify-between">
 				<div className="flex items-center justify-center gap-2">
 					<Button
 						variant={"secondary"}
@@ -31,7 +32,7 @@ function Topbar({ title, subtitle, workflowId, hideButtons = false }: Props) {
 						<ChevronLeftIcon size={20} />
 						Back
 					</Button>
-					<div className="flex justify-center items-center gap-4">
+					<div className="flex flex-col pl-2">
 						<p className="font-bold text-ellipsis truncate">{title}</p>
 
 						{subtitle && (
@@ -41,6 +42,7 @@ function Topbar({ title, subtitle, workflowId, hideButtons = false }: Props) {
 						)}
 					</div>
 				</div>
+				<NavigationTabs workflowId={workflowId} />
 				<div className="flex gap-2">
 					{!hideButtons && (
 						<>

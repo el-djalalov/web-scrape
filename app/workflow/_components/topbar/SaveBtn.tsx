@@ -22,6 +22,7 @@ function SaveBtn({ workflowId }: { workflowId: string }) {
 	});
 	return (
 		<Button
+			size={"sm"}
 			disabled={saveMutation.isPending}
 			variant={"secondary"}
 			className="flex items-center gap-2 hover:!bg-inherit-200/90 border"
