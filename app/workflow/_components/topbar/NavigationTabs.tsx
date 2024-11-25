@@ -10,10 +10,10 @@ function NavigationTabs({ workflowId }: { workflowId: string }) {
 	const activeValue = pathname?.split("/")[2];
 
 	return (
-		<div className="absolute left-1/2 transform -translate-x-1/2">
+		<div className="left-1/2 md:absolute md:left-1/2 transform -translate-x-1/2">
 			<Tabs
 				value={activeValue}
-				className="w-[400px] items-center justify-center"
+				className="w-[150px] sm:w-[200px] lg:w-[400px] items-center justify-center"
 			>
 				<TabsList className="grid w-full grid-cols-2">
 					<Link href={`/workflow/editor/${workflowId}`}>
