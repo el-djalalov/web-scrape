@@ -7,7 +7,7 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-    url      = "file:./dev.db"
+    url    = "file:./dev.db"
 }
 
 model Workflow {
@@ -17,6 +17,8 @@ model Workflow {
   description String?
 
   defination String
+  executionPlan String?
+  creditsCost Int @default(0)
   status String
 
   lastRunAt DateTime?

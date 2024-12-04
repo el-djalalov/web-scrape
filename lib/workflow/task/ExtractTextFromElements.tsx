@@ -6,7 +6,7 @@ export const ExtractTextFromElementTask = {
 	type: TaskType.EXTRACT_TEXT_FROM_ELEMENT,
 	label: "Extract text from element",
 	icon: (props: LucideProps) => (
-		<TextIcon className="stroke-blue-400" {...props} />
+		<TextIcon className="stroke-green-500 w-5 h-5" {...props} />
 	),
 	isEntryPoint: false,
 	credits: 2,

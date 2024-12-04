@@ -6,7 +6,7 @@ export const PageToHtmlTask = {
 	type: TaskType.PAGE_TO_HTML,
 	label: "Get html from page",
 	icon: (props: LucideProps) => (
-		<CodeIcon className="stroke-blue-400" {...props} />
+		<CodeIcon className="stroke-green-500 w-5 h-5" {...props} />
 	),
 	isEntryPoint: false,
 	credits: 2,

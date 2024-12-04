@@ -1,6 +1,6 @@
 import { TaskParamType } from "@/types/task";
 
 export const ColorForHandle: Record<TaskParamType, string> = {
-	[TaskParamType.BROWSER_INTANCE]: "!bg-sky-400",
+	[TaskParamType.BROWSER_INTANCE]: "!bg-primary",
 	STRING: "!bg-amber-400",
 };
