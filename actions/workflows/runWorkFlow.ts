@@ -9,6 +9,7 @@ import {
 	WorkflowExecutionPlan,
 	WorkflowExecutionStatus,
 	WorkflowExecutionTrigger,
+	WorkflowStatus,
 } from "@/types/workflow";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
@@ -29,33 +30,41 @@ export async function RunWorkFlow(form: {
 		throw new Error("Workdlow id is required");
 	}
 
-	const worfkow = await prisma.workflow.findUnique({
+	const workflow = await prisma.workflow.findUnique({
 		where: {
 			userId,
 			id: workflowId,
 		},
 	});
 
-	if (!worfkow) {
+	if (!workflow) {
 		throw new Error("Workflow is not found");
 	}
 	let executionPlan: WorkflowExecutionPlan;
+	let workflowDefination = flowDefination;
+	if (workflow.status === WorkflowStatus.PUBLISHED) {
+		if (!workflow.executionPlan) {
+			throw new Error("No execution plan found in published workflow");
+		}
+		executionPlan = JSON.parse(workflow.executionPlan);
+		workflowDefination = workflow.defination;
+	} else {
+		// Workflow is a draft
+		if (!flowDefination) {
+			throw new Error("Flow defination is not defined");
+		}
+		const flow = JSON.parse(flowDefination);
+		const result = FlowToExecutionPlan(flow.nodes, flow.edges);
+		if (result.error) {
+			throw new Error("Flow defination was not valid");
+		}
 
-	if (!flowDefination) {
-		throw new Error("Flow defination is not defined");
+		if (!result.executionPlan) {
+			throw new Error("No execution plan was generated");
+		}
+
+		executionPlan = result.executionPlan;
 	}
-
-	const flow = JSON.parse(flowDefination);
-	const result = FlowToExecutionPlan(flow.nodes, flow.edges);
-	if (result.error) {
-		throw new Error("Flow defination was not valid");
-	}
-
-	if (!result.executionPlan) {
-		throw new Error("No execution plan was generated");
-	}
-
-	executionPlan = result.executionPlan;
 
 	const execution = await prisma.workflowExecution.create({
 		data: {
@@ -64,7 +73,7 @@ export async function RunWorkFlow(form: {
 			status: WorkflowExecutionStatus.PENDING,
 			startedAt: new Date(),
 			trigger: WorkflowExecutionTrigger.MANUAL,
-			definition: flowDefination,
+			definition: workflowDefination,
 			phases: {
 				create: executionPlan.flatMap(phase => {
 					return phase.nodes.flatMap(node => {

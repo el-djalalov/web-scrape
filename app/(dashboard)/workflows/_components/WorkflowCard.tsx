@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import TooltipWrapper from "@/components/TooltipWrapper";
 import DeleteWorkflowDialog from "./DeleteWorkflowDialog";
+import RunBtn from "./RunBtn";
 
 const statusColors = {
 	[WorkflowStatus.DRAFT]: "bg-yellow-400 text-yellow-600",
@@ -66,6 +67,7 @@ function WorkflowCard({ workflow }: { workflow: Workflow }) {
 					</div>
 				</div>
 				<div className="flex items-center space-x-2">
+					{!isDraft && <RunBtn workflowId={workflow.id} />}
 					<Link
 						href={`/workflow/editor/${workflow.id}`}
 						className={cn(
@@ -109,10 +111,10 @@ function WorkflowActions({
 				<DropdownMenuTrigger asChild>
 					<Button variant={"outline"} size={"sm"}>
 						{/* <div className="flex items-center justify-center w-full h-full"> */}
-							{/* 	<TooltipWrapper content={"More actions"}> */}
-							<MoreVerticalIcon size={18} />
-							{/* </TooltipWrapper> */}
-					{/* 	</div> */}
+						{/* 	<TooltipWrapper content={"More actions"}> */}
+						<MoreVerticalIcon size={18} />
+						{/* </TooltipWrapper> */}
+						{/* 	</div> */}
 					</Button>
 				</DropdownMenuTrigger>
 				<DropdownMenuContent align="end">
