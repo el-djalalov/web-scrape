@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/table";
 import { DatesToDurationString } from "@/lib/helper/dates";
 import { Badge } from "@/components/ui/badge";
-import ExecutionStatusIndicator from "./ExecutionStatusIndicator";
+import { ExecutionStatusIndicator } from "./ExecutionStatusIndicator";
 import { WorkflowExecutionStatus } from "@/types/workflow";
 import { CoinsIcon } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";

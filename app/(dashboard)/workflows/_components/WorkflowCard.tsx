@@ -32,10 +32,15 @@ import DeleteWorkflowDialog from "./DeleteWorkflowDialog";
 import RunBtn from "./RunBtn";
 import SchedularDialog from "./SchedularDialog";
 import { Badge } from "@/components/ui/badge";
-import ExecutionStatusIndicator from "@/app/workflow/runs/[workflowId]/_components/ExecutionStatusIndicator";
 import { format, formatDistanceToNow } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
 import { Separator } from "@/components/ui/separator";
+import {
+	ExecutionStatusIndicator,
+	ExecutionStatusLabel,
+} from "@/app/workflow/runs/[workflowId]/_components/ExecutionStatusIndicator";
+import { DuplicateWorkflow } from "@/actions/workflows/duplicateWorkflow";
+import DuplicateWorkflowDialog from "./DuplicateWorkflowDialog";
 
 const statusColors = {
 	[WorkflowStatus.DRAFT]: "bg-amber-400 text-yellow-600",
@@ -47,7 +52,7 @@ function WorkflowCard({ workflow }: { workflow: Workflow }) {
 	return (
 		<Card
 			className={cn(
-				"border border-separate shadow-sm rounded-lg overflow-hidden hover:shadow-md dark:shadow-primary/30"
+				"border border-separate shadow-sm rounded-lg overflow-hidden hover:shadow-md dark:shadow-primary/30 group/card"
 			)}
 		>
 			<CardContent className="p-4 flex items-center justify-between h-[120px]">
@@ -75,6 +80,8 @@ function WorkflowCard({ workflow }: { workflow: Workflow }) {
 							</Link>
 						</h3>
 
+						<DuplicateWorkflowDialog workflowId={workflow.id} />
+
 						{/* 		{isDraft && (
 							<Badge
 								className="text-sm font-medium rounded-full"
@@ -95,19 +102,21 @@ function WorkflowCard({ workflow }: { workflow: Workflow }) {
 
 				<div className="flex items-center space-x-2">
 					{!isDraft && <RunBtn workflowId={workflow.id} />}
-					<Link
-						href={`/workflow/editor/${workflow.id}`}
-						className={cn(
-							buttonVariants({
-								variant: "outline",
-								size: "sm",
-							}),
-							"flex items-center gap-2"
-						)}
-					>
-						<Settings size={16} />
-						Edit
-					</Link>
+					<TooltipWrapper content={workflow.description}>
+						<Link
+							href={`/workflow/editor/${workflow.id}`}
+							className={cn(
+								buttonVariants({
+									variant: "outline",
+									size: "sm",
+								}),
+								"flex items-center gap-2"
+							)}
+						>
+							<Settings size={16} />
+							Edit
+						</Link>
+					</TooltipWrapper>
 					<WorkflowActions
 						workflowName={workflow.name}
 						workflowId={workflow.id}
@@ -212,6 +221,9 @@ function LastRunDetails({ workflow }: { workflow: Workflow }) {
 	const nextSchedule = nextRunAt && format(nextRunAt, "yyyy-MM-dd HH:mm");
 	const nextScheduleUtc =
 		nextRunAt && formatInTimeZone(nextRunAt, "UTC", "HH:mm");
+
+	const isDraft = workflow.status === WorkflowStatus.DRAFT;
+	if (isDraft) return null;
 	return (
 		<div className="flex bg-primary/5 px-4 py-1 justify-between items-center text-muted-foreground">
 			<div className="">
@@ -224,7 +236,9 @@ function LastRunDetails({ workflow }: { workflow: Workflow }) {
 						<ExecutionStatusIndicator
 							status={lastRunStatus as WorkflowExecutionStatus}
 						/>
-						<span>{lastRunStatus}</span>
+						<ExecutionStatusLabel
+							status={lastRunStatus as WorkflowExecutionStatus}
+						/>
 						<span>{formattedStartedAt}</span>
 						<ChevronRight
 							size={14}
@@ -238,9 +252,9 @@ function LastRunDetails({ workflow }: { workflow: Workflow }) {
 			{nextRunAt && (
 				<div className="flex items-center text-sm gap-2">
 					<ClockIcon size={16} />
-					<span>Next run at:</span>
-					<span>{nextSchedule}</span>
-					<span>{nextScheduleUtc} UTC</span>
+					<span className="text-xs">Next run at:</span>
+					<span className="text-xs">{nextSchedule}</span>
+					<span className="text-xs">({nextScheduleUtc} UTC)</span>
 				</div>
 			)}
 		</div>
