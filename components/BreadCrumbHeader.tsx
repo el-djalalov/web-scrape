@@ -7,6 +7,7 @@ import {
 	BreadcrumbItem,
 	BreadcrumbLink,
 	BreadcrumbList,
+	BreadcrumbSeparator,
 } from "./ui/breadcrumb";
 import { PathParamsContext } from "next/dist/shared/lib/hooks-client-context.shared-runtime";
 import { MobileSideBar } from "./Sidebar";
@@ -26,6 +27,7 @@ function BreadCrumbHeader() {
 									{path === "" ? "home" : path}
 								</BreadcrumbLink>
 							</BreadcrumbItem>
+							{index !== paths.length - 1 && <BreadcrumbSeparator />}
 						</React.Fragment>
 					))}
 				</BreadcrumbList>
