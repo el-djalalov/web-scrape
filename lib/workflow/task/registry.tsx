@@ -7,6 +7,7 @@ import { FillInputTask } from "./FillInput";
 import { ClickElementTask } from "./ClickElement";
 import { WaitForElementTask } from "./WaitForElement";
 import { DeliverViaWebHookTask } from "./DeliverViaWebHook";
+import { ExtractDataWithAiTask } from "./ExtractDataWithAi";
 
 type Registry = {
 	[K in TaskType]: WorkflowTask & { type: K };
@@ -20,4 +21,5 @@ export const TaskRegistry: Registry = {
 	CLICK_ELEMENT: ClickElementTask,
 	WAIT_FOR_ELEMENT: WaitForElementTask,
 	DELIVER_VIA_WEBHOOK: DeliverViaWebHookTask,
+	EXTRACT_DATA_WITH_AI: ExtractDataWithAiTask,
 };

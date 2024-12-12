@@ -22,9 +22,9 @@ export default function Credentials() {
 
 			<div className="h-full py-6 space-y-8">
 				<Alert>
-					<ShieldIcon className="h-4 w-4 stroke-primary" />
-					<AlertTitle className="text-primary">Encryption</AlertTitle>
-					<AlertDescription>
+					<ShieldIcon className="h-8 w-8 stroke-primary" />
+					<AlertTitle className="text-primary ml-4">Encryption</AlertTitle>
+					<AlertDescription className="ml-4 text-sm text-muted-foreground">
 						All information is securely encrypted, ensuring your data remains
 						safe
 					</AlertDescription>
@@ -72,9 +72,9 @@ async function UserCredentials() {
 				});
 				return (
 					<Card key={credential.id} className="w-full p-4 flex justify-between">
-						<div className="flex gap-2 items-center">
-							<div className="rounded-full bg-primary/10 w-8 h-8 flex items-center justify-center">
-								<LockKeyholeIcon size={16} className="stroke-primary" />
+						<div className="flex gap-4 items-center">
+							<div className="rounded-full bg-secondary w-10 h-10 flex items-center justify-center">
+								<LockKeyholeIcon size={20} className="stroke-primary" />
 							</div>
 							<div>
 								<p className="font-bold">{credential.name}</p>

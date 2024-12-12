@@ -1,7 +1,7 @@
 import crypto from "crypto";
 import "server-only";
 
-const algo = "aes-256-cbc"; // key leng this 32 bytes
+const algo = "aes-256-cbc";
 // openssl rand -hex 32
 
 export const symmetricEncrypt = (data: string) => {
