@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import Topbar from "../../../_components/topbar/Topbar";
-import { waitFor } from "@/lib/helper/waitFor";
 import { Loader2Icon } from "lucide-react";
 import { GetWorkflowExecutionWithPhases } from "@/actions/workflows/GetWorkflowExecutionWithPhases";
 import ExecutionViewer from "./_components/ExecutionViewer";

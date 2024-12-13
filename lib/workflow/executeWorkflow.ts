@@ -5,7 +5,6 @@ import {
 	ExecutionPhaseStatus,
 	WorkflowExecutionStatus,
 } from "@/types/workflow";
-import { waitFor } from "../helper/waitFor";
 import { ExecutionPhase } from "@prisma/client";
 import { AppNode } from "@/types/appNode";
 import { TaskRegistry } from "./task/registry";
@@ -44,7 +43,6 @@ export async function ExecuteWorkflow(executionId: string, nextRunAt?: Date) {
 	let creditsConsumed = 0;
 	let executionFailed = false;
 	for (const phase of execution.phases) {
-		await waitFor(3000);
 		const phaseExecution = await executeWorkflowPhase(
 			phase,
 			environment,

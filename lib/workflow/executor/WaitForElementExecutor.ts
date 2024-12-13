@@ -1,5 +1,4 @@
 import { ExecutionEnvironment } from "@/types/executor";
-import { ClickElementTask } from "../task/ClickElement";
 import { WaitForElementTask } from "../task/WaitForElement";
 
 export async function WaitForElementExecutor(

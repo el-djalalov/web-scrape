@@ -1,7 +1,6 @@
 import { ExecutionEnvironment } from "@/types/executor";
 import { PageToHtmlTask } from "../task/PageToHtml";
 import { FillInputTask } from "../task/FillInput";
-import { waitFor } from "@/lib/helper/waitFor";
 
 export async function FillInputExecutor(
 	environment: ExecutionEnvironment<typeof FillInputTask>
