@@ -17,7 +17,7 @@ export default function PhaseStatusBadge({
 			return <CircleDashedIcon size={22} className="stroke-muted-foreground" />;
 		case ExecutionPhaseStatus.RUNNING:
 			return (
-				<Loader2Icon size={22} className="animate-spin stroke-yellow-500" />
+				<Loader2Icon size={22} className="animate-spin stroke-amber-500" />
 			);
 		case ExecutionPhaseStatus.FAILED:
 			return <CircleXIcon size={22} className="stroke-destructive" />;

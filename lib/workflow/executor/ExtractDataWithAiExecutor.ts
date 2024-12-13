@@ -41,13 +41,13 @@ export async function ExtractDataWithAiExecutor(
 			return false;
 		}
 
-		/* 	const mockExtractedData = {
+		const mockExtractedData = {
 			usernameSelector: "#username",
 			passwordSelector: "#password",
 			loginSelector: ".btn",
-		}; */
+		};
 
-		const openai = new OpenAI({
+		/* const openai = new OpenAI({
 			apiKey: plainCredentialVal,
 		});
 
@@ -83,8 +83,8 @@ export async function ExtractDataWithAiExecutor(
 			return false;
 		}
 
-		environment.setOutput("Extracted data", result);
-		//environment.setOutput("Extracted data", JSON.stringify(mockExtractedData));
+		environment.setOutput("Extracted data", result); */
+		environment.setOutput("Extracted data", JSON.stringify(mockExtractedData));
 
 		return true;
 	} catch (error: any) {

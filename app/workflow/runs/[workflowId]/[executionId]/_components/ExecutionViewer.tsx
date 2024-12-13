@@ -95,7 +95,7 @@ function ExecutionViewer({ initialData }: { initialData: ExecutionData }) {
 	const creditsConsumed = GetPhasesTotalCost(query.data?.phases || []);
 	return (
 		<div className="flex w-full h-full">
-			<aside className="w=[440px] min-w-[440px] max-w-[440px] border-r-2 border-separate flex flex-grow flex-col overflow-hidden">
+			<aside className="w=[410px] min-w-[410px] max-w-[410px] border-r-2 border-separate flex flex-grow flex-col overflow-hidden">
 				<div className="py-4 px-2">
 					<ExecuteLabel
 						icon={CircleDashedIcon}
@@ -147,7 +147,7 @@ function ExecutionViewer({ initialData }: { initialData: ExecutionData }) {
 						</div>
 					</div>
 					<Separator />
-					<div className="overflow-auto h-full py-2">
+					<div className="overflow-y-auto lg:h-[597px] py-2">
 						{query.data?.phases.map((phase, index) => (
 							<Button
 								key={phase.id}
