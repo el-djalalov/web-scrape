@@ -16,7 +16,7 @@ function StatsCard(props: Props) {
 				<CardTitle>{props.title}</CardTitle>
 				<props.icon
 					size={120}
-					className="text-muted-foreground absolute -bottom-4 -right-8 stroke-primary opacity-10"
+					className="text-muted-foreground absolute -bottom-4 -right-8 stroke-primary dark:opacity-25 opacity-10"
 				/>
 			</CardHeader>
 			<CardContent>
