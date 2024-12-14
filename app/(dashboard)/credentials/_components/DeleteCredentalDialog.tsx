@@ -42,8 +42,8 @@ function DeleteCredentalDialog(props: Props) {
 	return (
 		<AlertDialog open={open} onOpenChange={setOpen}>
 			<AlertDialogTrigger asChild>
-				<Button variant={"destructive"} size={"icon"}>
-					<XIcon size={18} />
+				<Button variant={"destructive"} size={"sm"}>
+					<XIcon size={16} />
 				</Button>
 			</AlertDialogTrigger>
 			<AlertDialogContent>
