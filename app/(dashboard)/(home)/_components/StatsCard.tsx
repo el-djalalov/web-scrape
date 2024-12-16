@@ -11,16 +11,16 @@ interface Props {
 
 function StatsCard(props: Props) {
 	return (
-		<Card className="relative overflow-hidden h-full">
+		<Card className="relative overflow-hidden h-full bg-gradient-to-br from-primary/20 via-primary/5 to-background border-primary/20 shadow-lg flex justify-between flex-col">
 			<CardHeader className="flex pb-2">
-				<CardTitle>{props.title}</CardTitle>
+				<CardTitle className="text-lg">{props.title}</CardTitle>
 				<props.icon
-					size={120}
+					size={140}
 					className="text-muted-foreground absolute -bottom-4 -right-8 stroke-primary dark:opacity-25 opacity-10"
 				/>
 			</CardHeader>
 			<CardContent>
-				<div className="text-2xl font-bold text-primary">
+				<div className="text-4xl font-bold text-primary">
 					<ReactCountUpWrapper value={props.value} />
 				</div>
 			</CardContent>

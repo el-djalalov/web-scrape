@@ -1,11 +1,13 @@
 "use client";
 
+import { GetCreditsUsage } from "@/actions/analytics/GetCreditUsage";
 import { GetWorkflowExecutionStats } from "@/actions/analytics/GetWorkflowExecutionStats";
 
 import {
 	Card,
 	CardContent,
 	CardDescription,
+	CardFooter,
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
@@ -19,38 +21,50 @@ import {
 	ChartTooltipContent,
 } from "@/components/ui/chart";
 
-import { ChartSplineIcon } from "lucide-react";
+import {
+	ChartBarDecreasingIcon,
+	ChartColumnDecreasingIcon,
+	ChartColumnStackedIcon,
+	TrendingUp,
+} from "lucide-react";
 
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
-type ChartData = Awaited<ReturnType<typeof GetWorkflowExecutionStats>>;
+type ChartData = Awaited<ReturnType<typeof GetCreditsUsage>>;
 
 const chartConfig = {
 	success: {
-		label: "Success",
+		label: "Successfull Phases Credits",
 		color: "hsl(var(--chart-1))",
 	},
 	failed: {
-		label: "Failed",
+		label: "Failed Phases Credits",
 		color: "hsl(var(--chart-2))",
 	},
 } satisfies ChartConfig;
 
-function ExecutionStatusChart({ data }: { data: ChartData }) {
+function CreditsUsageChart({
+	data,
+	title,
+	description,
+}: {
+	data: ChartData;
+	title: string;
+	description: string;
+}) {
 	return (
 		<Card>
 			<CardHeader>
 				<CardTitle className="text-2xl font-bold flex items-center gap-2">
-					<ChartSplineIcon className="w-6 h-6 text-primary" />
-					Workflow execution status
+					<ChartColumnStackedIcon className="w-6 h-6 text-primary" />
+					{title}
 				</CardTitle>
-				<CardDescription>
-					Daily number of successfull and failed workflow executions
-				</CardDescription>
+				<CardDescription>{description}</CardDescription>
 			</CardHeader>
 			<CardContent>
+				{/* 	<pre>{JSON.stringify(data, null, 4)}</pre> */}
 				<ChartContainer config={chartConfig} className="max-h-[200px] w-full">
-					<AreaChart accessibilityLayer data={data}>
+					<BarChart accessibilityLayer data={data}>
 						<defs>
 							<linearGradient id="fillSuccess" x1="0" y1="0" x2="0" y2="1">
 								<stop
@@ -101,6 +115,7 @@ function ExecutionStatusChart({ data }: { data: ChartData }) {
 							cursor={false}
 							content={
 								<ChartTooltipContent
+									className="w-[230px]"
 									labelFormatter={value => {
 										return new Date(value).toLocaleDateString("en-US", {
 											month: "short",
@@ -112,42 +127,28 @@ function ExecutionStatusChart({ data }: { data: ChartData }) {
 							}
 						/>
 
-						<Area
+						<Bar
 							dataKey="failed"
-							type={"bump"}
+							radius={[0, 0, 4, 4]}
 							fill="url(#fillFailed)"
 							fillOpacity={0.4}
 							stroke="var(--color-failed)"
 							stackId="a"
-							min={0}
 						/>
 
-						<Area
-							min={0}
+						<Bar
+							radius={[4, 4, 0, 0]}
 							dataKey="success"
-							type={"bump"}
 							fill="url(#fillSuccess)"
 							fillOpacity={0.4}
 							stroke="var(--color-success)"
 							stackId="a"
 						/>
-					</AreaChart>
+					</BarChart>
 				</ChartContainer>
 			</CardContent>
-			{/* 	<CardFooter>
-				<div className="flex w-full items-start gap-2 text-sm">
-					<div className="grid gap-2">
-						<div className="flex items-center gap-2 font-medium leading-none">
-							Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-						</div>
-						<div className="flex items-center gap-2 leading-none text-muted-foreground">
-							January - June 2024
-						</div>
-					</div>
-				</div>
-			</CardFooter> */}
 		</Card>
 	);
 }
 
-export default ExecutionStatusChart;
+export default CreditsUsageChart;
