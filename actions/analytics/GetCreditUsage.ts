@@ -3,10 +3,7 @@
 import { PeriodToDateRange } from "@/lib/helper/dates";
 import prisma from "@/lib/prisma";
 import { Period } from "@/types/analytics";
-import {
-	ExecutionPhaseStatus,
-	WorkflowExecutionStatus,
-} from "@/types/workflow";
+import { ExecutionPhaseStatus } from "@/types/workflow";
 import { auth } from "@clerk/nextjs/server";
 import { eachDayOfInterval } from "date-fns";
 import { format } from "date-fns";

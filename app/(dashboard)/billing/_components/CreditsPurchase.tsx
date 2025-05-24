@@ -67,7 +67,7 @@ function CreditsPurchase() {
 					className="w-full"
 					disabled={mutation.isPending}
 					onClick={() => {
-						mutation.mutate(selectedPack);
+						//mutation.mutate(selectedPack);
 					}}
 				>
 					<CreditCard className="mr-2 h-8 w-8" /> Purchase credits

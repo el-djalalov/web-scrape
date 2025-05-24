@@ -36,7 +36,7 @@ async function BalanceCard() {
 
 					<CoinsIcon
 						size={140}
-						className="text-primary opacity-20 absolute bottom-0 right-0"
+						className="text-primary opacity-20 absolute bottom-0 right-0 top-5"
 					/>
 				</div>
 			</CardContent>

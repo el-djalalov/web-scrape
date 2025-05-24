@@ -1,4 +1,3 @@
-import { number } from "zod";
 
 export const LogLevels = ["info", "error"] as const;
 

@@ -111,4 +111,5 @@ async function CreditsUsage({ selectedPeriod }: { selectedPeriod: Period }) {
 		/>
 	);
 }
+
 export default Home;

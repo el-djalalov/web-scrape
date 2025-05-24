@@ -1,17 +1,13 @@
 "use client";
 
 import { GetCreditsUsage } from "@/actions/analytics/GetCreditUsage";
-import { GetWorkflowExecutionStats } from "@/actions/analytics/GetWorkflowExecutionStats";
-
 import {
 	Card,
 	CardContent,
 	CardDescription,
-	CardFooter,
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-
 import {
 	ChartConfig,
 	ChartContainer,
@@ -20,26 +16,28 @@ import {
 	ChartTooltip,
 	ChartTooltipContent,
 } from "@/components/ui/chart";
-
-import {
-	ChartBarDecreasingIcon,
-	ChartColumnDecreasingIcon,
-	ChartColumnStackedIcon,
-	TrendingUp,
-} from "lucide-react";
-
+import { fail } from "assert";
+import { ChartColumnStackedIcon } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
 type ChartData = Awaited<ReturnType<typeof GetCreditsUsage>>;
+const chartData = [
+	{ month: "January", desktop: 186, mobile: 80 },
+	{ month: "February", desktop: 305, mobile: 200 },
+	{ month: "March", desktop: 237, mobile: 120 },
+	{ month: "April", desktop: 73, mobile: 190 },
+	{ month: "May", desktop: 209, mobile: 130 },
+	{ month: "June", desktop: 214, mobile: 140 },
+];
 
 const chartConfig = {
 	success: {
-		label: "Successfull Phases Credits",
-		color: "hsl(var(--chart-1))",
+		label: "Successful Phases Credits",
+		color: "var(--chart-success)",
 	},
 	failed: {
 		label: "Failed Phases Credits",
-		color: "hsl(var(--chart-2))",
+		color: "var(--chart-failed)",
 	},
 } satisfies ChartConfig;
 
@@ -62,7 +60,6 @@ function CreditsUsageChart({
 				<CardDescription>{description}</CardDescription>
 			</CardHeader>
 			<CardContent>
-				{/* 	<pre>{JSON.stringify(data, null, 4)}</pre> */}
 				<ChartContainer config={chartConfig} className="max-h-[200px] w-full">
 					<BarChart accessibilityLayer data={data}>
 						<defs>
@@ -94,11 +91,9 @@ function CreditsUsageChart({
 						</defs>
 
 						<CartesianGrid vertical={false} />
-
 						<XAxis
 							dataKey="date"
 							tickLine={false}
-							axisLine={false}
 							tickMargin={8}
 							minTickGap={32}
 							tickFormatter={value => {
@@ -110,12 +105,10 @@ function CreditsUsageChart({
 							}}
 						/>
 						<ChartLegend content={<ChartLegendContent />} />
-
 						<ChartTooltip
 							cursor={false}
 							content={
 								<ChartTooltipContent
-									className="w-[230px]"
 									labelFormatter={value => {
 										return new Date(value).toLocaleDateString("en-US", {
 											month: "short",
@@ -123,24 +116,23 @@ function CreditsUsageChart({
 										});
 									}}
 									indicator="dot"
+									className="w-[220px]"
 								/>
 							}
 						/>
-
 						<Bar
 							dataKey="failed"
-							radius={[0, 0, 4, 4]}
-							fill="url(#fillFailed)"
-							fillOpacity={0.4}
-							stroke="var(--color-failed)"
 							stackId="a"
+							radius={[0, 0, 4, 4]}
+							fill="var(--color-failed)"
+							fillOpacity={0.5}
+							stroke="var(--color-failed)"
 						/>
-
 						<Bar
-							radius={[4, 4, 0, 0]}
 							dataKey="success"
-							fill="url(#fillSuccess)"
-							fillOpacity={0.4}
+							radius={[4, 4, 0, 0]}
+							fill="var(--color-success)"
+							fillOpacity={0.5}
 							stroke="var(--color-success)"
 							stackId="a"
 						/>
