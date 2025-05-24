@@ -16,5 +16,5 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-![Screenshot of the app](https://www.example.com/screenshots/app_v1.png)
+![My Project Logo](/dashboard.png)
 
