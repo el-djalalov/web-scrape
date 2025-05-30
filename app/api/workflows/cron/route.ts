@@ -10,7 +10,7 @@ import {
 } from "@/types/workflow";
 import parser from "cron-parser";
 
-export async function GET(request: Request) {
+export async function GET() {
   const now = new Date();
 
   const dueWorkflows = await prisma.workflow.findMany({
@@ -79,7 +79,9 @@ export async function GET(request: Request) {
         where: { id: wf.id },
         data: { nextRunAt: nextRunForThisWorkflow },
       });
-    } catch (error) {}
+    } catch (error) {
+      console.error(`Error processing workflow ${wf.id}:`, error);
+    }
   }
 
   return Response.json(
