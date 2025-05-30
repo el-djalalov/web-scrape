@@ -1,6 +1,6 @@
 import { TaskParamType, TaskType } from "@/types/task";
 import { WorkflowTask } from "@/types/workflow";
-import { MousePointerClickIcon, SendIcon } from "lucide-react";
+import { SendIcon } from "lucide-react";
 
 export const DeliverViaWebHookTask = {
 	type: TaskType.DELIVER_VIA_WEBHOOK,
