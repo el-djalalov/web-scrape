@@ -1,7 +1,7 @@
+export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 import prisma from "@/lib/prisma";
-import { ExecuteWorkflow } from "@/lib/workflow/executeWorkflow";
 import { TaskRegistry } from "@/lib/workflow/task/registry";
 import {
   WorkflowStatus,
@@ -13,6 +13,8 @@ import {
 import parser from "cron-parser";
 
 export async function GET() {
+  const { ExecuteWorkflow } = await import("@/lib/workflow/executeWorkflow");
+
   const now = new Date();
 
   const dueWorkflows = await prisma.workflow.findMany({
