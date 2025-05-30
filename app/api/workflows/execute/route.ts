@@ -1,9 +1,6 @@
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-import prisma from "@/lib/prisma";
-import { ExecuteWorkflow } from "@/lib/workflow/executeWorkflow";
-import { TaskRegistry } from "@/lib/workflow/task/registry";
 import {
   ExecutionPhaseStatus,
   WorkflowExecutionPlan,
@@ -27,6 +24,10 @@ function isValidSecret(secret: string) {
 }
 
 export async function GET(request: Request) {
+  const { default: prisma } = await import("@/lib/prisma");
+  const { TaskRegistry } = await import("@/lib/workflow/task/registry");
+  const { ExecuteWorkflow } = await import("@/lib/workflow/executeWorkflow");
+
   const authHeader = request.headers.get("authorization");
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {

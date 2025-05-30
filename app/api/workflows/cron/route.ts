@@ -1,8 +1,6 @@
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-import prisma from "@/lib/prisma";
-import { TaskRegistry } from "@/lib/workflow/task/registry";
 import {
   WorkflowStatus,
   WorkflowExecutionStatus,
@@ -13,6 +11,8 @@ import {
 import parser from "cron-parser";
 
 export async function GET() {
+  const { default: prisma } = await import("@/lib/prisma");
+  const { TaskRegistry } = await import("@/lib/workflow/task/registry");
   const { ExecuteWorkflow } = await import("@/lib/workflow/executeWorkflow");
 
   const now = new Date();
