@@ -29,7 +29,7 @@ function Logo({
 				<span className="bg-gradient-to-r from-primary/90 to-primary/100 text-transparent bg-clip-text ">
 					Web
 				</span>
-				<span className="text-stone-700 dark:text-stone-300">Scrape</span>
+				<span className="text-slate-700 dark:text-stone-300">Scrape</span>
 			</div>
 		</Link>
 	);

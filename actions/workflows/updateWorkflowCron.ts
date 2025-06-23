@@ -20,7 +20,6 @@ export async function UpdateWorkflowCron({
 
 	try {
 		const interval = parser.parseExpression(cron, { utc: true });
-		console.log(interval);
 
 		await prisma.workflow.update({
 			where: { id, userId },
@@ -30,8 +29,6 @@ export async function UpdateWorkflowCron({
 			},
 		});
 	} catch (error: any) {
-		console.log("invalid Cron", error.message);
-
 		throw new Error("Invalid cron expression");
 	}
 	revalidatePath("/workflows");

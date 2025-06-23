@@ -10,12 +10,34 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
+import {
+	Sheet,
+	SheetContent,
+	SheetDescription,
+	SheetFooter,
+	SheetHeader,
+	SheetTitle,
+	SheetTrigger,
+} from "@/components/ui/sheet";
+
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { CreditsPack, PackId } from "@/types/billing";
+import { CreditsPacks, PackId } from "@/types/billing";
 import { useMutation } from "@tanstack/react-query";
 import { CoinsIcon, CreditCard } from "lucide-react";
 import React, { useState } from "react";
+import CheckoutPage from "./CheckoutPage";
+
+if (process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY === undefined) {
+	throw new Error(
+		"NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY is not defined. Please set it in your environment variables."
+	);
+}
+
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY!);
 
 function CreditsPurchase() {
 	const [selectedPack, setSelectedPack] = useState(PackId.MEDIUM);
@@ -43,7 +65,7 @@ function CreditsPurchase() {
 					onValueChange={value => setSelectedPack(value as PackId)}
 					value={selectedPack}
 				>
-					{CreditsPack.map(pack => (
+					{CreditsPacks.map(pack => (
 						<div
 							key={pack.id}
 							className="flex items-center space-x-3 bg-secondary/50 rounded-lg p-3 hover:bg-secondary"
@@ -63,7 +85,7 @@ function CreditsPurchase() {
 				</RadioGroup>
 			</CardContent>
 			<CardFooter>
-				<Button
+				{/* 	<Button
 					className="w-full"
 					disabled={mutation.isPending}
 					onClick={() => {
@@ -71,7 +93,50 @@ function CreditsPurchase() {
 					}}
 				>
 					<CreditCard className="mr-2 h-8 w-8" /> Purchase credits
-				</Button>
+				</Button> */}
+				<Sheet>
+					<SheetTrigger asChild>
+						<Button className="w-full" disabled={mutation.isPending}>
+							<CreditCard className="mr-2 h-8 w-8" /> Purchase credits
+						</Button>
+					</SheetTrigger>
+					<SheetContent className="min-w-[500px] flex flex-col ">
+						<SheetHeader className="flex flex-col items-start gap-0">
+							<SheetTitle className="flex items-center">
+								<CreditCard className="mr-2 h-8 w-8" />
+								Payment process
+							</SheetTitle>
+							<SheetDescription>
+								You are purchasing{" "}
+								{CreditsPacks.find(pack => pack.id === selectedPack)?.label} for
+								${" "}
+								{(
+									(CreditsPacks.find(pack => pack.id === selectedPack)?.price ||
+										0) / 100
+								).toFixed(2)}
+							</SheetDescription>
+						</SheetHeader>
+						<Elements
+							stripe={stripePromise}
+							options={{
+								mode: "payment",
+								amount:
+									CreditsPacks.find(pack => pack.id === selectedPack)?.price ||
+									0,
+								currency: "usd",
+							}}
+						>
+							<CheckoutPage
+								amount={
+									CreditsPacks.find(pack => pack.id === selectedPack)?.price ||
+									0
+								}
+							/>
+						</Elements>
+
+						<SheetFooter></SheetFooter>
+					</SheetContent>
+				</Sheet>
 			</CardFooter>
 		</Card>
 	);

@@ -15,10 +15,11 @@ export async function SetUpuser() {
 		where: { userId },
 	});
 	if (!balance) {
+		// Free 500 credits for new users
 		await prisma.userBalance.create({
 			data: {
 				userId,
-				credits: 100,
+				credits: 500,
 			},
 		});
 	}

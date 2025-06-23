@@ -21,6 +21,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<ClerkProvider
+			afterSignUpUrl={"/setup"}
 			afterSignOutUrl={"/sign-in"}
 			appearance={{
 				elements: {

@@ -12,7 +12,7 @@ export type CreditsPack = {
 	price: number;
 };
 
-export const CreditsPack: CreditsPack[] = [
+export const CreditsPacks: CreditsPack[] = [
 	{
 		id: PackId.SMALL,
 		name: "Small pack",
@@ -25,19 +25,19 @@ export const CreditsPack: CreditsPack[] = [
 		id: PackId.MEDIUM,
 		name: "Medium pack",
 		label: "5000 credits",
-		credits: 5000,
-		price: 3999, // $39.99
+		credits: 2500,
+		price: 3999, // $19.99
 	},
 
 	{
 		id: PackId.LARGE,
 		name: "Large pack",
 		label: "10000 credits",
-		credits: 10000,
-		price: 6999, // $69.99
+		credits: 7500,
+		price: 4999, // $49.99
 	},
 ];
 
 export const getCreditsPack = (id: PackId) => {
-	CreditsPack.find(p => p.id === id);
+	return CreditsPacks.find(p => p.id === id);
 };
