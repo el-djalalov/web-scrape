@@ -9,6 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import React from "react";
 import { CircleCheckBig } from "lucide-react";
+import { Description } from "@radix-ui/react-dialog";
 
 interface PaymentSuccessModalProps {
 	open: boolean;
@@ -27,6 +28,7 @@ const PaymentSuccessModal: React.FC<PaymentSuccessModalProps> = ({
 				<Button style={{ display: "none" }}></Button>
 			</DialogTrigger>
 			<DialogContent className="p-6 max-w-lg mx-auto rounded-lg shadow-lg">
+				<Description></Description>
 				<DialogTitle className="text-2xl font-semibold flex items-center gap-4">
 					Payment Success{" "}
 					<CircleCheckBig size={28} className="text-green-500" />
@@ -38,8 +40,7 @@ const PaymentSuccessModal: React.FC<PaymentSuccessModalProps> = ({
 
 				{amount && (
 					<p className="mt-2 text-sm text-muted-foreground">
-						Amount:{" "}
-						<strong className="text-lg">${(amount / 100).toFixed(2)}</strong>
+						Amount: <strong className="text-lg">${amount}</strong>
 					</p>
 				)}
 				<div className="mt-4 flex justify-end">

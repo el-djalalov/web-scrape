@@ -13,7 +13,6 @@ function UserAvailableCreditBadge() {
 	const query = useQuery({
 		queryKey: ["user-available-credits"],
 		queryFn: () => GetAvailableCredits(),
-		refetchInterval: 30 * 1000, // 30 secs
 	});
 	return (
 		<Link

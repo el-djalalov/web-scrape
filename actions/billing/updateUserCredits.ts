@@ -1,37 +1,46 @@
+// actions/billing/updateUserCredits.ts
 "use server";
 
 import prisma from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 
-export async function UpdateUserCredits(amount: number) {
+export async function UpdateUserCredits(creditsToAdd: number) {
 	const { userId } = await auth();
 
 	if (!userId) {
+		console.error("No user ID found in session");
 		throw new Error("Unauthenticated");
 	}
 
-	let creditsToAdd = 0;
-
-	if (amount === 9.99) {
-		creditsToAdd = 1000;
-	} else if (amount === 19.99) {
-		creditsToAdd = 2500;
-	} else if (amount === 49.99) {
-		creditsToAdd = 7500;
-	} else {
-		throw new Error("Invalid amount");
-		return;
-	}
-
 	try {
-		await prisma.userBalance.update({
+		// Check if user balance exists
+		const existingBalance = await prisma.userBalance.findUnique({
 			where: { userId },
-			data: {
-				credits: {
-					increment: creditsToAdd,
-				},
-			},
 		});
+
+		console.log("Existing balance:", existingBalance);
+
+		if (!existingBalance) {
+			// Create new balance if it doesn't exist
+			await prisma.userBalance.create({
+				data: {
+					userId,
+					credits: creditsToAdd,
+				},
+			});
+		} else {
+			// Update existing balance
+			await prisma.userBalance.update({
+				where: { userId },
+				data: {
+					credits: {
+						increment: creditsToAdd,
+					},
+				},
+			});
+		}
+
+		return { success: true, creditsAdded: creditsToAdd };
 	} catch (error) {
 		console.error("Error updating user credits:", error);
 		throw new Error("Failed to update user credits");

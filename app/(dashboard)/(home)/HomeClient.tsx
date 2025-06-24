@@ -9,9 +9,9 @@ import ExecutionStatusChart from "./_components/ExecutionStatusChart";
 import CreditsUsageChart from "../billing/_components/CreditsUsageChart";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { Fireworks } from "fireworks-js";
 import PaymentSuccessModal from "./_components/PaymentSuccessModal";
 import { UpdateUserCredits } from "@/actions/billing/updateUserCredits";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface HomeClientProps {
 	searchParams: {
@@ -44,80 +44,64 @@ export default function HomeClient({
 	const router = useRouter();
 	const [showFireworks, setShowFireworks] = useState(false);
 	const fireworksRef = useRef<HTMLDivElement | null>(null);
-	const fireworksInstance = useRef<Fireworks | null>(null);
 	const [amount, setAmount] = useState<number>(0);
 	const [modalOpen, setModalOpen] = useState(false);
+	const hasProcessedPayment = useRef(false);
+	const queryClient = useQueryClient();
 
 	useEffect(() => {
-		if (searchParams.redirect_status === "succeeded") {
-			if (searchParams.amount) {
-				setAmount(parseFloat(searchParams.amount));
-			}
-
-			const updateUserCredits = async () => {
-				if (amount > 0) {
-					try {
-						await UpdateUserCredits(amount);
-					} catch (error) {
-						console.error("Failed to update user credits:", error);
-						toast.error(
-							"Failed to update user credits. Please try again later."
-						);
-					}
-				}
-			};
-			updateUserCredits();
-			setModalOpen(true);
-
-			if (fireworksRef.current) {
-				fireworksInstance.current = new Fireworks(fireworksRef.current, {
-					autoresize: true,
-					opacity: 0.5,
-					acceleration: 1.05,
-					friction: 0.97,
-					gravity: 1.5,
-					particles: 50,
-					traceLength: 3,
-					traceSpeed: 10,
-					explosion: 5,
-					intensity: 30,
-					flickering: 50,
-					lineStyle: "round",
-					hue: { min: 0, max: 360 },
-					delay: { min: 30, max: 60 },
-					rocketsPoint: { min: 50, max: 50 },
-					lineWidth: {
-						explosion: { min: 1, max: 3 },
-						trace: { min: 1, max: 2 },
-					},
-					brightness: { min: 50, max: 80 },
-					decay: { min: 0.015, max: 0.03 },
-					mouse: {
-						click: false,
-						move: false,
-						max: 1,
-					},
-				});
-				fireworksInstance.current.start();
-				setShowFireworks(true);
-			}
-
-			const timer = setTimeout(() => {
-				if (fireworksInstance.current) {
-					fireworksInstance.current.stop(true);
-					setShowFireworks(false);
-				}
-				router.replace("/");
-			}, 5000);
-
-			return () => {
-				clearTimeout(timer);
-				if (fireworksInstance.current) {
-					fireworksInstance.current.stop(true);
-				}
-			};
+		if (
+			searchParams.redirect_status === "succeeded" &&
+			!hasProcessedPayment.current
+		) {
+			handlePaymentSuccess();
+		} else if (searchParams.redirect_status !== "succeeded") {
+			console.log("Redirect status is not succeeded, cleaning up.");
+			hasProcessedPayment.current = false;
 		}
 	}, [searchParams.redirect_status, router]);
+
+	const handlePaymentSuccess = async () => {
+		if (searchParams.amount) {
+			const amount = parseFloat(searchParams.amount);
+			const price = Number((amount / 100).toFixed(2));
+			setAmount(price);
+
+			let creditsToAdd = 0;
+			if (price === 9.99) {
+				creditsToAdd = 1000;
+			} else if (price === 19.99) {
+				creditsToAdd = 2500;
+			} else if (price === 49.99) {
+				creditsToAdd = 7500;
+			} else {
+				toast.error("Invalid amount");
+				return;
+			}
+
+			console.log("Credits to add:", creditsToAdd);
+			try {
+				const result = await UpdateUserCredits(creditsToAdd);
+				if (result?.success) {
+					toast.success(`${creditsToAdd} credits added to your account!`);
+					hasProcessedPayment.current = true;
+					setModalOpen(true);
+				}
+			} catch (error: Error | any) {
+				toast.error("Failed to add credits: " + error.message);
+			}
+		}
+
+		router.replace("/");
+	};
+
+	const closeModal = () => {
+		setModalOpen(false);
+		hasProcessedPayment.current = false;
+		queryClient.invalidateQueries({
+			queryKey: ["user-available-credits"],
+		});
+	};
 
 	return (
 		<div className="flex flex-1 flex-col h-full">
@@ -135,7 +119,7 @@ export default function HomeClient({
 			/>
 			<PaymentSuccessModal
 				open={modalOpen}
-				onClose={() => setModalOpen(false)}
+				onClose={closeModal}
 				amount={amount}
 			/>
 

@@ -1,14 +1,7 @@
-import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { AppProviders } from "@/components/providers/AppProviders";
-import {
-	ClerkProvider,
-	SignInButton,
-	SignedIn,
-	SignedOut,
-	UserButton,
-} from "@clerk/nextjs";
+import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "sonner";
 import { cn } from "@/lib/utils";
 
@@ -21,7 +14,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<ClerkProvider
-			afterSignUpUrl={"/setup"}
+			signUpForceRedirectUrl={"/setup"}
 			afterSignOutUrl={"/sign-in"}
 			appearance={{
 				elements: {
