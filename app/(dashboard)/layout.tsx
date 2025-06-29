@@ -1,10 +1,11 @@
 "use client";
 
+import React from "react";
+
 import BreadCrumbHeader from "@/components/BreadCrumbHeader";
 import DesktopSidebar from "@/components/Sidebar";
 import { ModeToggle } from "@/components/ThemeModeToggle";
 import { Separator } from "@/components/ui/separator";
-import { SignedIn, UserButton } from "@clerk/nextjs";
 import React from "react";
 
 function layout({ children }: { children: React.ReactNode }) {
@@ -16,9 +17,6 @@ function layout({ children }: { children: React.ReactNode }) {
 					<BreadCrumbHeader />
 					<div className="gap-4 flex items-center">
 						<ModeToggle />
-						<SignedIn>
-							<UserButton />
-						</SignedIn>
 					</div>
 				</header>
 				<Separator />

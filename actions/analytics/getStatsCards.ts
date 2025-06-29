@@ -4,13 +4,13 @@ import { PeriodToDateRange } from "@/lib/helper/dates";
 import prisma from "@/lib/prisma";
 import { Period } from "@/types/analytics";
 import { WorkflowExecutionStatus } from "@/types/workflow";
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "@/auth";
 
 export default async function GetStatsCardsValues(period: Period) {
-	const { userId } = await auth();
+	const session = await auth();
 
-	if (!userId) {
-		throw new Error("Unauthenticated");
+	if (!session || !session.user) {
+		return;
 	}
 
 	const { COMPLETED, FAILED } = WorkflowExecutionStatus;
@@ -19,7 +19,7 @@ export default async function GetStatsCardsValues(period: Period) {
 
 	const executions = await prisma.workflowExecution.findMany({
 		where: {
-			userId,
+			userId: session.user.id,
 			startedAt: {
 				gte: dateRange.startDate,
 				lte: dateRange.endDate,

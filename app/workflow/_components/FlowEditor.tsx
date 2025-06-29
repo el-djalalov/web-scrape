@@ -64,7 +64,7 @@ function FlowEditor({ workflow }: { workflow: Workflow }) {
 		(e: React.DragEvent) => {
 			e.preventDefault();
 			const taskType = e.dataTransfer.getData("application/reactflow");
-			if (typeof taskType === undefined || !taskType) return;
+			if (typeof taskType === "undefined" || !taskType) return;
 
 			const position = screenToFlowPosition({
 				x: e.clientX,

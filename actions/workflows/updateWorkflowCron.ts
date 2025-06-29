@@ -1,7 +1,7 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "@/auth";
 import parser from "cron-parser";
 import { revalidatePath } from "next/cache";
 
@@ -12,9 +12,9 @@ export async function UpdateWorkflowCron({
 	id: string;
 	cron: string;
 }) {
-	const { userId } = await auth();
+	const session = await auth();
 
-	if (!userId) {
+	if (!session) {
 		throw new Error("Unauthenticated");
 	}
 
@@ -22,7 +22,7 @@ export async function UpdateWorkflowCron({
 		const interval = parser.parseExpression(cron, { utc: true });
 
 		await prisma.workflow.update({
-			where: { id, userId },
+			where: { id, userId: session.user.id },
 			data: {
 				cron,
 				nextRunAt: interval.next().toDate(),

@@ -1,24 +1,24 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 
 export async function SetUpuser() {
-	const { userId } = await auth();
+	const session = await auth();
 
-	if (!userId) {
-		throw new Error("Unauthenticated");
+	if (!session || !session.user) {
+		throw new Error("User not found");
 	}
 
 	const balance = await prisma.userBalance.findUnique({
-		where: { userId },
+		where: { userId: session.user.id },
 	});
 	if (!balance) {
 		// Free 500 credits for new users
 		await prisma.userBalance.create({
 			data: {
-				userId,
+				userId: session.user.id,
 				credits: 500,
 			},
 		});

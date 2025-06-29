@@ -15,6 +15,8 @@ import { usePathname } from "next/navigation";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import { useRouter } from "next/navigation";
 import UserAvailableCreditBadge from "./UserAvailableCreditBadge";
+import { useSession, signOut } from "next-auth/react";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 const routes = [
 	{
@@ -40,6 +42,7 @@ const routes = [
 ];
 function DesktopSidebar() {
 	const pathname = usePathname();
+	const { data: session } = useSession();
 
 	const activeRoute =
 		routes.find(route => route.href !== "/" && pathname.includes(route.href)) ||
@@ -70,6 +73,33 @@ function DesktopSidebar() {
 					</Link>
 				))}
 			</div>
+			{session && (
+				<div className="absolute bottom-4 left-4 right-4">
+					<div className="flex items-center gap-2 p-2 rounded-md bg-secondary">
+						<Avatar>
+							<AvatarImage src={session.user?.image || ""} />
+							<AvatarFallback>
+								{session.user?.name?.charAt(0)}
+							</AvatarFallback>
+						</Avatar>
+						<div className="flex flex-col">
+							<span className="text-sm font-semibold">
+								{session.user?.name}
+							</span>
+							<span className="text-xs text-muted-foreground">
+								{session.user?.email}
+							</span>
+						</div>
+					</div>
+					<Button
+						variant="outline"
+						className="w-full mt-2"
+						onClick={() => signOut()}
+					>
+						Sign out
+					</Button>
+				</div>
+			)}
 		</div>
 	);
 }
@@ -77,6 +107,7 @@ function DesktopSidebar() {
 export function MobileSideBar() {
 	const [isOpen, setOpen] = useState(false);
 	const pathname = usePathname();
+	const { data: session } = useSession();
 	const activeRoute =
 		routes.find(
 			route => route.href.length > 0 && pathname.includes(route.href)
@@ -115,6 +146,33 @@ export function MobileSideBar() {
 								</Link>
 							))}
 						</div>
+						{session && (
+							<div className="absolute bottom-4 left-4 right-4">
+								<div className="flex items-center gap-2 p-2 rounded-md bg-secondary">
+									<Avatar>
+										<AvatarImage src={session.user?.image || ""} />
+										<AvatarFallback>
+											{session.user?.name?.charAt(0)}
+										</AvatarFallback>
+									</Avatar>
+									<div className="flex flex-col">
+										<span className="text-sm font-semibold">
+											{session.user?.name}
+										</span>
+										<span className="text-xs text-muted-foreground">
+											{session.user?.email}
+										</span>
+									</div>
+								</div>
+								<Button
+									variant="outline"
+									className="w-full mt-2"
+									onClick={() => signOut()}
+								>
+									Sign out
+								</Button>
+							</div>
+						)}
 					</SheetContent>
 				</Sheet>
 			</nav>

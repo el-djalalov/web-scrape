@@ -1,5 +1,7 @@
 "use client";
 
+import React from "react";
+
 import { DeleteCredential } from "@/actions/credentials/DeleteCredential";
 import {
 	AlertDialog,

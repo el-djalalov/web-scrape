@@ -6,7 +6,7 @@ import {
 	createCredentialSchema,
 	createCredentialSchemaType,
 } from "@/schema/credential";
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "@/auth";
 import { revalidatePath } from "next/cache";
 
 export async function CreateCredential(form: createCredentialSchemaType) {
@@ -15,9 +15,9 @@ export async function CreateCredential(form: createCredentialSchemaType) {
 	if (!success) {
 		throw new Error("Invalid form data");
 	}
-	const { userId } = await auth();
+	const session = await auth();
 
-	if (!userId) {
+	if (!session || !session.user) {
 		throw new Error("Unauthenticated");
 	}
 
@@ -27,7 +27,7 @@ export async function CreateCredential(form: createCredentialSchemaType) {
 
 	const result = await prisma.credential.create({
 		data: {
-			userId,
+			userId: session.user.id,
 			name: data?.name,
 			value: encryptedValue,
 		},

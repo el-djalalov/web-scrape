@@ -1,21 +1,19 @@
-// actions/billing/updateUserCredits.ts
 "use server";
 
 import prisma from "@/lib/prisma";
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "@/auth";
 
 export async function UpdateUserCredits(creditsToAdd: number) {
-	const { userId } = await auth();
+	const session = await auth();
 
-	if (!userId) {
-		console.error("No user ID found in session");
-		throw new Error("Unauthenticated");
+	if (!session || !session.user) {
+		throw new Error("User not found");
 	}
 
 	try {
 		// Check if user balance exists
 		const existingBalance = await prisma.userBalance.findUnique({
-			where: { userId },
+			where: { userId: session.user.id },
 		});
 
 		console.log("Existing balance:", existingBalance);
@@ -24,14 +22,14 @@ export async function UpdateUserCredits(creditsToAdd: number) {
 			// Create new balance if it doesn't exist
 			await prisma.userBalance.create({
 				data: {
-					userId,
+					userId: session.user.id,
 					credits: creditsToAdd,
 				},
 			});
 		} else {
 			// Update existing balance
 			await prisma.userBalance.update({
-				where: { userId },
+				where: { userId: session.user.id },
 				data: {
 					credits: {
 						increment: creditsToAdd,

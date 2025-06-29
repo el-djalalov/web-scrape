@@ -2,16 +2,16 @@
 
 import prisma from "@/lib/prisma";
 import { Period } from "@/types/analytics";
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "@/auth";
 
 export async function GetPeriods() {
-	const { userId } = await auth();
-
-	if (!userId) {
-		throw new Error("Unauthenticated");
+	const session = await auth();
+	if (!session || !session.user) {
+		throw new Error("User not authenticated");
 	}
+
 	const years = await prisma.workflowExecution.aggregate({
-		where: { userId },
+		where: { userId: session.user.id },
 		_min: { startedAt: true },
 	});
 

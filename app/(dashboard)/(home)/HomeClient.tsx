@@ -8,20 +8,13 @@ import StatsCard from "./_components/StatsCard";
 import ExecutionStatusChart from "./_components/ExecutionStatusChart";
 import CreditsUsageChart from "../billing/_components/CreditsUsageChart";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import PaymentSuccessModal from "./_components/PaymentSuccessModal";
 import { UpdateUserCredits } from "@/actions/billing/updateUserCredits";
 import { useQueryClient } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
 
 interface HomeClientProps {
-	searchParams: {
-		month?: string;
-		year?: string;
-		amount?: string;
-		payment_intent?: string;
-		payment_intent_client_secret?: string;
-		redirect_status?: string;
-	};
 	periods: any[];
 	statsCardsData: {
 		workflowExecutions: number;
@@ -34,7 +27,6 @@ interface HomeClientProps {
 }
 
 export default function HomeClient({
-	searchParams,
 	periods,
 	statsCardsData,
 	executionStatsData,
@@ -42,6 +34,8 @@ export default function HomeClient({
 	period,
 }: HomeClientProps) {
 	const router = useRouter();
+	const searchParams = useSearchParams();
+	const { data: session, status } = useSession();
 	const [showFireworks, setShowFireworks] = useState(false);
 	const fireworksRef = useRef<HTMLDivElement | null>(null);
 	const [amount, setAmount] = useState<number>(0);
@@ -50,20 +44,34 @@ export default function HomeClient({
 	const queryClient = useQueryClient();
 
 	useEffect(() => {
+		if (status === "unauthenticated") {
+			router.push("/sign-in");
+		}
+	}, [status, router]);
+
+	useEffect(() => {
 		if (
-			searchParams.redirect_status === "succeeded" &&
+			searchParams.get("redirect_status") === "succeeded" &&
 			!hasProcessedPayment.current
 		) {
 			handlePaymentSuccess();
-		} else if (searchParams.redirect_status !== "succeeded") {
+		} else if (searchParams.get("redirect_status") !== "succeeded") {
 			console.log("Redirect status is not succeeded, cleaning up.");
 			hasProcessedPayment.current = false;
 		}
-	}, [searchParams.redirect_status, router]);
+	}, [searchParams, router]);
+
+	const handlePeriodChange = (period: Period) => {
+		const params = new URLSearchParams(window.location.search);
+		params.set("month", period.month.toString());
+		params.set("year", period.year.toString());
+		router.push(`/?${params.toString()}`);
+	};
 
 	const handlePaymentSuccess = async () => {
-		if (searchParams.amount) {
-			const amount = parseFloat(searchParams.amount);
+		const amountParam = searchParams.get("amount");
+		if (amountParam) {
+			const amount = parseFloat(amountParam);
 			const price = Number((amount / 100).toFixed(2));
 			setAmount(price);
 
@@ -103,6 +111,10 @@ export default function HomeClient({
 		});
 	};
 
+	if (status === "loading") {
+		return <div>Loading...</div>; // Or a spinner component
+	}
+
 	return (
 		<div className="flex flex-1 flex-col h-full">
 			<div
@@ -125,7 +137,11 @@ export default function HomeClient({
 
 			<div className="flex justify-between">
 				<h1 className="text-3xl font-bold">Home</h1>
-				<PeriodSelector periods={periods} selectedPeriod={period} />
+				<PeriodSelector
+					periods={periods}
+					selectedPeriod={period}
+					onPeriodChange={handlePeriodChange}
+				/>
 			</div>
 			<div className="h-full py-6 flex flex-col gap-4">
 				<div className="grid gap-3 lg:gap-8 lg:grid-cols-3 min-h-[120px]">

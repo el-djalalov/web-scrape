@@ -9,7 +9,7 @@ import {
 import { AppNode } from "@/types/appNode";
 import { TaskType } from "@/types/task";
 import { WorkflowStatus } from "@/types/workflow";
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "@/auth";
 import { Edge } from "@xyflow/react";
 import { redirect } from "next/navigation";
 
@@ -18,10 +18,10 @@ export async function CreateWorkflow(form: createWorkflowSchemaType) {
 	if (!success) {
 		throw new Error("Invalid form data");
 	}
-	const { userId } = await auth();
+	const session = await auth();
 
-	if (!userId) {
-		throw new Error("Unauthenticated");
+	if (!session || !session.user) {
+		return;
 	}
 
 	const initialFlow: { nodes: AppNode[]; edges: Edge[] } = {
@@ -33,7 +33,7 @@ export async function CreateWorkflow(form: createWorkflowSchemaType) {
 
 	const result = await prisma.workflow.create({
 		data: {
-			userId,
+			userId: session.user.id,
 			status: WorkflowStatus.DRAFT,
 			defination: JSON.stringify(initialFlow),
 			...data,
