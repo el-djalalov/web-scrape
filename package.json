@@ -61,6 +61,7 @@
 		"cmdk": "^1.0.0",
 		"cron-parser": "^4.9.0",
 		"cronstrue": "^2.52.0",
+		"css-select": "^6.0.0",
 		"date-fns": "^3.6.0",
 		"date-fns-tz": "^3.2.0",
 		"drawer": "^0.0.2",

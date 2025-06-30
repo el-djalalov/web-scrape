@@ -87,7 +87,6 @@ export default function HomeClient({
 				return;
 			}
 
-			console.log("Credits to add:", creditsToAdd);
 			try {
 				const result = await UpdateUserCredits(creditsToAdd);
 				if (result?.success) {

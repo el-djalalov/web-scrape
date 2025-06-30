@@ -16,7 +16,6 @@ export async function UpdateUserCredits(creditsToAdd: number) {
 			where: { userId: session.user.id },
 		});
 
-		console.log("Existing balance:", existingBalance);
 
 		if (!existingBalance) {
 			// Create new balance if it doesn't exist

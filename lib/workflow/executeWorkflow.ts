@@ -1,6 +1,5 @@
 import "server-only";
 import prisma from "../prisma";
-import { revalidatePath } from "next/cache";
 import {
   ExecutionPhaseStatus,
   WorkflowExecutionStatus,
@@ -63,7 +62,13 @@ export async function ExecuteWorkflow(executionId: string, nextRunAt?: Date) {
   );
 
   await cleanupEnv(environment);
-  revalidatePath("/workflows/runs");
+  await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/revalidate`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ path: "/workflows/runs" }),
+  });
 }
 
 async function initializeWorkflowExecution(

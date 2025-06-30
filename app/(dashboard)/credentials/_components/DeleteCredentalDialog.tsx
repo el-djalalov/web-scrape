@@ -25,7 +25,7 @@ type Props = {
 	name: string;
 };
 
-function DeleteCredentalDialog(props: Props) {
+function DeleteCredentialDialog(props: Props) {
 	const [open, setOpen] = useState(false);
 	const [confirmText, setConfirmText] = useState("");
 	const deleteMutation = useMutation({
@@ -91,4 +91,4 @@ function DeleteCredentalDialog(props: Props) {
 	);
 }
 
-export default DeleteCredentalDialog;
+export default DeleteCredentialDialog;

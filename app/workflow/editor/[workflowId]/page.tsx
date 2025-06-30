@@ -4,7 +4,7 @@ import React from "react";
 import Editor from "../../_components/Editor";
 
 async function page({ params }: { params: { workflowId: string } }) {
-	const { workflowId } = params;
+	const { workflowId } = await params;
 	const session = await auth();
 	if (!session) return <div>Unauthenticated</div>;
 
