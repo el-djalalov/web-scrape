@@ -117,12 +117,12 @@ export default function SignIn() {
 				<CardFooter className="flex flex-col space-y-4">
 					<div className="text-sm text-center text-muted-foreground">
 						<span>Don&apos;t have an account? </span>
-						<a
+						<Link
 							href="/api/auth/sign-up"
 							className="text-primary hover:underline font-medium"
 						>
 							Sign up
-						</a>
+						</Link>
 					</div>
 
 					<div className="text-xs text-center text-muted-foreground">

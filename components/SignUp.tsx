@@ -143,12 +143,12 @@ const SignUp = () => {
 				<CardFooter className="flex flex-col space-y-4">
 					<div className="text-sm text-center text-muted-foreground">
 						<span>Already have an account? </span>
-						<a
+						<Link
 							href="/api/auth/sign-in"
 							className="text-primary hover:underline font-medium"
 						>
 							Sign in
-						</a>
+						</Link>
 					</div>
 
 					<div className="text-xs text-center text-muted-foreground">

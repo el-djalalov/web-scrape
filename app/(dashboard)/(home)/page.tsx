@@ -3,21 +3,23 @@ import { GetPeriods } from "@/actions/analytics/getPeriods";
 import GetStatsCardsValues from "@/actions/analytics/getStatsCards";
 import { GetWorkflowExecutionStats } from "@/actions/analytics/GetWorkflowExecutionStats";
 import { GetCreditsUsage } from "@/actions/analytics/GetCreditUsage";
+
+interface SearchParams {
+	month?: string;
+	year?: string;
+}
+
 export default async function Home({
 	searchParams,
 }: {
-	searchParams: {
-		month?: string;
-		year?: string;
-	};
+	searchParams: Promise<SearchParams>;
 }) {
 	const currentDate = new Date();
 
-	// Await the searchParams
 	const params = await searchParams;
 
 	const period = {
-		month: params?.month ? parseInt(params.month) : currentDate.getMonth(),
+		month: params?.month ? parseInt(params.month) : currentDate.getMonth() + 1,
 		year: params?.year ? parseInt(params.year) : currentDate.getFullYear(),
 	};
 

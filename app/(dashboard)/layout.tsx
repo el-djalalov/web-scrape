@@ -1,12 +1,10 @@
 "use client";
 
 import React from "react";
-
 import BreadCrumbHeader from "@/components/BreadCrumbHeader";
 import DesktopSidebar from "@/components/Sidebar";
 import { ModeToggle } from "@/components/ThemeModeToggle";
 import { Separator } from "@/components/ui/separator";
-import React from "react";
 
 function layout({ children }: { children: React.ReactNode }) {
 	return (

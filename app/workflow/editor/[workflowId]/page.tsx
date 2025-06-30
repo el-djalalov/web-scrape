@@ -3,8 +3,9 @@ import { auth } from "@/auth";
 import React from "react";
 import Editor from "../../_components/Editor";
 
-async function page({ params }: { params: { workflowId: string } }) {
+async function page({ params }: { params: Promise<{ workflowId: string }> }) {
 	const { workflowId } = await params;
+
 	const session = await auth();
 	if (!session) return <div>Unauthenticated</div>;
 

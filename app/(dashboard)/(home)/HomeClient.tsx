@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Period } from "@/types/analytics";
 import { CirclePlayIcon, CoinsIcon, WaypointsIcon } from "lucide-react";
 import PeriodSelector from "./_components/PeriodSelector";
@@ -49,26 +49,7 @@ export default function HomeClient({
 		}
 	}, [status, router]);
 
-	useEffect(() => {
-		if (
-			searchParams.get("redirect_status") === "succeeded" &&
-			!hasProcessedPayment.current
-		) {
-			handlePaymentSuccess();
-		} else if (searchParams.get("redirect_status") !== "succeeded") {
-			console.log("Redirect status is not succeeded, cleaning up.");
-			hasProcessedPayment.current = false;
-		}
-	}, [searchParams, router]);
-
-	const handlePeriodChange = (period: Period) => {
-		const params = new URLSearchParams(window.location.search);
-		params.set("month", period.month.toString());
-		params.set("year", period.year.toString());
-		router.push(`/?${params.toString()}`);
-	};
-
-	const handlePaymentSuccess = async () => {
+	const handlePaymentSuccess = useCallback(async () => {
 		const amountParam = searchParams.get("amount");
 		if (amountParam) {
 			const amount = parseFloat(amountParam);
@@ -100,6 +81,22 @@ export default function HomeClient({
 		}
 
 		router.replace("/");
+	}, [searchParams, router]);
+
+	useEffect(() => {
+		if (
+			searchParams.get("redirect_status") === "succeeded" &&
+			!hasProcessedPayment.current
+		) {
+			handlePaymentSuccess();
+		}
+	}, [searchParams, handlePaymentSuccess]);
+
+	const handlePeriodChange = (period: Period) => {
+		const params = new URLSearchParams(window.location.search);
+		params.set("month", period.month.toString());
+		params.set("year", period.year.toString());
+		router.push(`/?${params.toString()}`);
 	};
 
 	const closeModal = () => {
