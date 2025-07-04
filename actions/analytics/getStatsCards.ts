@@ -48,12 +48,14 @@ export default async function GetStatsCardsValues(period: Period) {
 	};
 
 	stats.creditsConsumed = executions.reduce(
-		(sum, execution) => sum + execution.creditsConsumed,
+		(sum: any, execution: { creditsConsumed: any }) =>
+			sum + execution.creditsConsumed,
 		0
 	);
 
 	stats.phaseExecutions = executions.reduce(
-		(sum, execution) => sum + execution.phases.length,
+		(sum: any, execution: { phases: string | any[] }) =>
+			sum + execution.phases.length,
 		0
 	);
 

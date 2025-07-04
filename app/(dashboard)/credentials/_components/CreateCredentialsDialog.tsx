@@ -31,7 +31,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useMutation } from "@tanstack/react-query";
-import { CreateWorkflow } from "@/actions/workflows/createWorkflow";
 import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -66,7 +65,9 @@ function CreateCredentialDialog({ triggerText }: { triggerText?: string }) {
 
 	const onSubmit = useCallback(
 		(values: createCredentialSchemaType) => {
-			toast.loading("Creating workflow...", { id: "create-credential" });
+			toast.loading("Creating credential...", {
+				id: "create-credential",
+			});
 			mutate(values);
 		},
 		[mutate]

@@ -1,22 +1,18 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 generator client {
   provider = "prisma-client-js"
-  output   = "/app/generated/prisma-client"
 }
 
 model User {
-  id       String  @id @default(uuid())
-  email    String  @unique
-  password String?
-  name     String?
-  image    String?
+  id            String    @id @default(uuid())
+  email         String    @unique
+  emailVerified DateTime? // Required by Auth.js
+  name          String?
+  image         String?
 
   accounts           Account[]
   workflows          Workflow[]
@@ -60,6 +56,16 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 
+// Optional: Add VerificationToken model if you plan to use email verification  
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// Rest of your models remain the same...  
 model Workflow {
   id          String  @id @default(cuid())
   userId      String
@@ -82,7 +88,6 @@ model Workflow {
   user      User                @relation(fields: [userId], references: [id], onDelete: Cascade)
   execution WorkflowExecution[]
 
-  // Users can not have 2 workflows with the same name
   @@unique([name, userId])
 }
 

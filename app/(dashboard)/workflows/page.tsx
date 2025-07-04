@@ -5,6 +5,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle, InboxIcon } from "lucide-react";
 import CreateWorkflowDialog from "./_components/CreateWorkflowDialog";
 import WorkflowCard from "./_components/WorkflowCard";
+import { Workflow } from "@prisma/client";
 
 function page() {
 	return (
@@ -67,7 +68,7 @@ async function UserWorkflows() {
 	}
 	return (
 		<pre className="grid grid-cols-1 gap-4">
-			{workflows.map(workflow => (
+			{workflows.map((workflow: Workflow) => (
 				<WorkflowCard key={workflow.id} workflow={workflow} />
 			))}
 		</pre>

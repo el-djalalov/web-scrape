@@ -3,7 +3,7 @@ import { GetPeriods } from "@/actions/analytics/getPeriods";
 import GetStatsCardsValues from "@/actions/analytics/getStatsCards";
 import { GetWorkflowExecutionStats } from "@/actions/analytics/GetWorkflowExecutionStats";
 import { GetCreditsUsage } from "@/actions/analytics/GetCreditUsage";
-
+import { SessionProvider } from "next-auth/react";
 interface SearchParams {
 	month?: string;
 	year?: string;
@@ -36,13 +36,15 @@ export default async function Home({
 		};
 
 		return (
-			<HomeClient
-				periods={periods}
-				statsCardsData={statsCardsData ?? defaultStatsCardsData}
-				executionStatsData={executionStatsData}
-				creditsUsageData={creditsUsageData}
-				period={period}
-			/>
+			<SessionProvider>
+				<HomeClient
+					periods={periods}
+					statsCardsData={statsCardsData ?? defaultStatsCardsData}
+					executionStatsData={executionStatsData}
+					creditsUsageData={creditsUsageData}
+					period={period}
+				/>
+			</SessionProvider>
 		);
 	} catch (error) {
 		console.error("Error fetching data for Home page:", error);

@@ -39,7 +39,6 @@ import {
 	ExecutionStatusIndicator,
 	ExecutionStatusLabel,
 } from "@/app/workflow/runs/[workflowId]/_components/ExecutionStatusIndicator";
-import { DuplicateWorkflow } from "@/actions/workflows/duplicateWorkflow";
 import DuplicateWorkflowDialog from "./DuplicateWorkflowDialog";
 
 const statusColors = {
@@ -81,15 +80,6 @@ function WorkflowCard({ workflow }: { workflow: Workflow }) {
 						</h3>
 
 						<DuplicateWorkflowDialog workflowId={workflow.id} />
-
-						{/* 		{isDraft && (
-							<Badge
-								className="text-sm font-medium rounded-full"
-								variant={"secondary"}
-							>
-								Draft
-							</Badge>
-						)} */}
 					</div>
 
 					<ScheduleSection

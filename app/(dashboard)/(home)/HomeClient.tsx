@@ -35,19 +35,12 @@ export default function HomeClient({
 }: HomeClientProps) {
 	const router = useRouter();
 	const searchParams = useSearchParams();
-	const { data: session, status } = useSession();
 	const [showFireworks, setShowFireworks] = useState(false);
 	const fireworksRef = useRef<HTMLDivElement | null>(null);
 	const [amount, setAmount] = useState<number>(0);
 	const [modalOpen, setModalOpen] = useState(false);
 	const hasProcessedPayment = useRef(false);
 	const queryClient = useQueryClient();
-
-	useEffect(() => {
-		if (status === "unauthenticated") {
-			router.push("/sign-in");
-		}
-	}, [status, router]);
 
 	const handlePaymentSuccess = useCallback(async () => {
 		const amountParam = searchParams.get("amount");
@@ -106,10 +99,6 @@ export default function HomeClient({
 			queryKey: ["user-available-credits"],
 		});
 	};
-
-	if (status === "loading") {
-		return <div>Loading...</div>; // Or a spinner component
-	}
 
 	return (
 		<div className="flex flex-1 flex-col h-full">

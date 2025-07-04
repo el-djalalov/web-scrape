@@ -14,6 +14,8 @@ export async function SetUpuser() {
 	const balance = await prisma.userBalance.findUnique({
 		where: { userId: session.user.id },
 	});
+
+	console.log("USER BALANCE: ", balance);
 	if (!balance) {
 		// Free 500 credits for new users
 		await prisma.userBalance.create({

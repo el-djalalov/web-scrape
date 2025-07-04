@@ -31,9 +31,11 @@ import { useMutation } from "@tanstack/react-query";
 import { CreateWorkflow } from "@/actions/workflows/createWorkflow";
 import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
+import { useRouter } from "next/navigation";
 
 function CreateWorkflowDialog({ triggerText }: { triggerText?: string }) {
 	const [open, setOpen] = useState(false);
+	const router = useRouter();
 
 	const form = useForm<createWorkflowSchemaType>({
 		resolver: zodResolver(createWorkflowSchema),
@@ -42,10 +44,11 @@ function CreateWorkflowDialog({ triggerText }: { triggerText?: string }) {
 
 	const { mutate, isPending } = useMutation({
 		mutationFn: CreateWorkflow,
-		onSuccess: () => {
+		onSuccess: data => {
 			toast.success("Workflow has been created successfully", {
 				id: "create-workflow",
 			});
+			router.push(`/workflow/editor/${data?.workflowId}`);
 		},
 		onError: () => {
 			toast.error("Failed to create workflow", {

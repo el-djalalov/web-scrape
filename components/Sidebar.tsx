@@ -44,6 +44,8 @@ function DesktopSidebar() {
 	const pathname = usePathname();
 	const { data: session } = useSession();
 
+	//console.log(session);
+
 	const activeRoute =
 		routes.find(route => route.href !== "/" && pathname.includes(route.href)) ||
 		routes[0];
@@ -78,9 +80,7 @@ function DesktopSidebar() {
 					<div className="flex items-center gap-2 p-2 rounded-md bg-secondary">
 						<Avatar>
 							<AvatarImage src={session.user?.image || ""} />
-							<AvatarFallback>
-								{session.user?.name?.charAt(0)}
-							</AvatarFallback>
+							<AvatarFallback>{session.user?.name?.charAt(0)}</AvatarFallback>
 						</Avatar>
 						<div className="flex flex-col">
 							<span className="text-sm font-semibold">

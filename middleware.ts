@@ -1,28 +1,19 @@
 import { auth } from "@/auth";
-import { NextResponse } from "next/server";
-import { NextRequest } from "next/server";
 
-const protectedRoutes = [
-	"/billing",
-	"/credentials",
-	"/workflows",
-];
+export default auth(req => {
+	const { pathname } = req.nextUrl;
 
-export default async function middleware(request: NextRequest) {
-	const session = await auth();
-	const { pathname } = request.nextUrl;
+	const protectedRoutes = ["/billing", "/credentials", "/workflows"];
+	const isProtectedRoute =
+		pathname === "/" ||
+		protectedRoutes.some(route => pathname.startsWith(route));
 
-    if (pathname.startsWith('/api/auth')) {
-        return NextResponse.next();
-    }
-
-	const isProtectedRoute = pathname === '/' || protectedRoutes.some(route =>
-		pathname.startsWith(route)
-	);
-
-	if (isProtectedRoute && !session) {
-		return NextResponse.redirect(new URL("/api/auth/sign-in", request.url));
+	if (isProtectedRoute && !req.auth) {
+		const newUrl = new URL("/api/auth/signin", req.nextUrl.origin);
+		return Response.redirect(newUrl);
 	}
-	return NextResponse.next();
-}
+});
 
+export const config = {
+	matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+};
