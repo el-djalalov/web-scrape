@@ -15,32 +15,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 			clientId: process.env.GITHUB_CLIENT_ID!,
 			clientSecret: process.env.GITHUB_CLIENT_SECRET!,
 		}),
-		/* 	Credentials({
-			authorize: async credentials => {
-				try {
-					const { email, password } = await signInSchema.parseAsync(
-						credentials
-					);
-
-					const user = await db.user.findUnique({ where: { email } });
-
-					if (!user || !user.password) {
-						return null;
-					}
-
-					const valid = await bcrypt.compare(password, user.password);
-
-					if (!valid) {
-						return null;
-					}
-
-					const { password: _, ...safeUser } = user;
-					return safeUser;
-				} catch (error) {
-					return null;
-				}
-			},
-		}), */
 	],
 	session: {
 		strategy: "jwt",
