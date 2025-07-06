@@ -19,7 +19,7 @@ export default async function Home({
 	const params = await searchParams;
 
 	const period = {
-		month: params?.month ? parseInt(params.month) : currentDate.getMonth() + 1,
+		month: params?.month ? parseInt(params.month) : currentDate.getMonth(),
 		year: params?.year ? parseInt(params.year) : currentDate.getFullYear(),
 	};
 

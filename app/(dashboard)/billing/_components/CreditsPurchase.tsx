@@ -85,15 +85,6 @@ function CreditsPurchase() {
 				</RadioGroup>
 			</CardContent>
 			<CardFooter>
-				{/* 	<Button
-					className="w-full"
-					disabled={mutation.isPending}
-					onClick={() => {
-						//mutation.mutate(selectedPack);
-					}}
-				>
-					<CreditCard className="mr-2 h-8 w-8" /> Purchase credits
-				</Button> */}
 				<Sheet>
 					<SheetTrigger asChild>
 						<Button className="w-full" disabled={mutation.isPending}>

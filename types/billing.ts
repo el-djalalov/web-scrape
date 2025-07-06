@@ -24,17 +24,17 @@ export const CreditsPacks: CreditsPack[] = [
 	{
 		id: PackId.MEDIUM,
 		name: "Medium pack",
-		label: "5000 credits",
+		label: "2500 credits",
 		credits: 2500,
-		price: 3999, // $19.99
+		price: 1999, // $19.99
 	},
 
 	{
 		id: PackId.LARGE,
 		name: "Large pack",
-		label: "10000 credits",
-		credits: 7500,
-		price: 4999, // $49.99
+		label: "5000 credits",
+		credits: 5000,
+		price: 2999, // $29.99
 	},
 ];
 
