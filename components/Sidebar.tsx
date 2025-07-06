@@ -13,7 +13,6 @@ import Link from "next/link";
 import { Button, buttonVariants } from "./ui/button";
 import { usePathname } from "next/navigation";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
-import { useRouter } from "next/navigation";
 import UserAvailableCreditBadge from "./UserAvailableCreditBadge";
 import { useSession, signOut } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
@@ -50,6 +49,8 @@ function DesktopSidebar() {
 		routes.find(route => route.href !== "/" && pathname.includes(route.href)) ||
 		routes[0];
 
+	console.log(activeRoute);
+
 	return (
 		<div className="hidden relative md:block min-w-[280px] max-w-[280px] h-screen overflow-hidden w-full bg-primary/5 dark:bg-secondary/30 dark:text-foreground text-muted-foreground border-r-2  border-separate">
 			<div className="flex items-center justify-center gap-2 border-b-[1px] border-separate p-4">
@@ -58,20 +59,16 @@ function DesktopSidebar() {
 			<div className="p-2">
 				<UserAvailableCreditBadge />
 			</div>
-			<div className="flex flex-col p-2">
+			<div className="flex flex-col px-3 py-4 gap-4">
 				{routes.map(route => (
 					<Link
 						key={route.href}
 						href={route.href}
-						className={
-							buttonVariants({
-								variant: "ghost",
-							}) +
-							" " +
-							(activeRoute.href === route.href
-								? "sidebarActiveItem"
-								: "sidebarItem")
-						}
+						className={`flex items-center w-full text-left px-4 py-2 gap-4 rounded-md transition-colors ${
+							activeRoute.href === route.href
+								? "bg-primary/10 text-white font-medium border-l-2 border-primary"
+								: "text-muted-foreground hover:bg-primary/5 hover:text-white"
+						}`}
 					>
 						<route.icon size={20} />
 						{route.label}
@@ -131,19 +128,16 @@ export function MobileSideBar() {
 					>
 						<Logo />
 						<UserAvailableCreditBadge />
-						<div className="flex flex-col gap-1">
+						<div className="flex flex-col gap-4">
 							{routes.map(route => (
 								<Link
 									key={route.href}
 									href={route.href}
-									className={
-										buttonVariants({ variant: "ghost" }) +
-										" " +
-										(activeRoute.href === route.href
-											? "sidebarActiveItem"
-											: "sidebarItem")
-									}
-									onClick={() => setOpen(prev => !prev)}
+									className={`flex items-center w-full text-left px-4 py-2 gap-4 rounded-md transition-colors ${
+										activeRoute.href === route.href
+											? "bg-primary/10 text-white font-medium border-l-2 border-primary"
+											: "text-muted-foreground hover:bg-primary/5 hover:text-white"
+									}`}
 								>
 									<route.icon size={20} />
 									{route.label}
