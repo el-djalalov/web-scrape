@@ -63,12 +63,15 @@ function DesktopSidebar() {
 					<Link
 						key={route.href}
 						href={route.href}
-						className={buttonVariants({
-							variant:
-								activeRoute.href === route.href
-									? "sidebarActiveItem"
-									: "sidebarItem",
-						})}
+						className={
+							buttonVariants({
+								variant: "ghost",
+							}) +
+							" " +
+							(activeRoute.href === route.href
+								? "sidebarActiveItem"
+								: "sidebarItem")
+						}
 					>
 						<route.icon size={20} />
 						{route.label}
@@ -133,12 +136,13 @@ export function MobileSideBar() {
 								<Link
 									key={route.href}
 									href={route.href}
-									className={buttonVariants({
-										variant:
-											activeRoute.href === route.href
-												? "sidebarActiveItem"
-												: "sidebarItem",
-									})}
+									className={
+										buttonVariants({ variant: "ghost" }) +
+										" " +
+										(activeRoute.href === route.href
+											? "sidebarActiveItem"
+											: "sidebarItem")
+									}
 									onClick={() => setOpen(prev => !prev)}
 								>
 									<route.icon size={20} />

@@ -48,7 +48,6 @@ async function getBrowserOptions() {
 			],
 		};
 	} else {
-		// Production/serverless configuration - use dynamic import
 		const chromium = await import("@sparticuz/chromium");
 		return {
 			args: [
@@ -59,7 +58,6 @@ async function getBrowserOptions() {
 				"--disable-setuid-sandbox",
 				"--disable-dev-shm-usage",
 			],
-			// defaultViewport is not available on chromium.default; Puppeteer will use its own default
 			executablePath: await chromium.default.executablePath(),
 			headless: true,
 			ignoreHTTPSErrors: true,
@@ -71,8 +69,7 @@ function getLocalChromePath(): string {
 	const platform = process.platform;
 
 	switch (platform) {
-		case "win32":
-			// Windows paths
+		case "win32": {
 			const windowsPaths = [
 				"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
 				"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
@@ -90,9 +87,9 @@ function getLocalChromePath(): string {
 				}
 			}
 			throw new Error("Chrome executable not found on Windows");
+		}
 
-		case "darwin":
-			// macOS paths
+		case "darwin": {
 			const macPaths = [
 				"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
 				"/Applications/Chromium.app/Contents/MacOS/Chromium",
@@ -109,9 +106,9 @@ function getLocalChromePath(): string {
 				}
 			}
 			throw new Error("Chrome executable not found on macOS");
+		}
 
-		case "linux":
-			// Linux paths
+		case "linux": {
 			const linuxPaths = [
 				"/usr/bin/google-chrome",
 				"/usr/bin/google-chrome-stable",
@@ -130,6 +127,7 @@ function getLocalChromePath(): string {
 				}
 			}
 			throw new Error("Chrome executable not found on Linux");
+		}
 
 		default:
 			throw new Error(`Unsupported platform: ${platform}`);
