@@ -2,12 +2,6 @@ import { Environment, ExecutionEnvironment } from "@/types/executor";
 import puppeteer from "puppeteer-core";
 import { LaunchBrowserTask } from "../task/LaunchBrowser";
 
-// Import for serverless environments
-let chromium: any;
-if (process.env.NODE_ENV === "production") {
-	chromium = require("@sparticuz/chromium");
-}
-
 export async function LaunchBrowserExecutor(
 	environment: ExecutionEnvironment<typeof LaunchBrowserTask>
 ): Promise<boolean> {
@@ -39,12 +33,9 @@ export async function LaunchBrowserExecutor(
 
 async function getBrowserOptions() {
 	if (process.env.NODE_ENV === "development") {
-		// Use environment variable or auto-detect
-		const executablePath =
-			process.env.PUPPETEER_EXECUTABLE_PATH || getLocalChromePath();
-
+		// Local development configuration
 		return {
-			executablePath,
+			executablePath: getLocalChromePath(),
 			headless: true,
 			args: [
 				"--no-sandbox",
@@ -57,19 +48,20 @@ async function getBrowserOptions() {
 			],
 		};
 	} else {
-		// Production/serverless configuration
+		// Production/serverless configuration - use dynamic import
+		const chromium = await import("@sparticuz/chromium");
 		return {
 			args: [
-				...chromium.args,
+				...chromium.default.args,
 				"--hide-scrollbars",
 				"--disable-web-security",
 				"--no-sandbox",
 				"--disable-setuid-sandbox",
 				"--disable-dev-shm-usage",
 			],
-			defaultViewport: chromium.defaultViewport,
-			executablePath: await chromium.executablePath(),
-			headless: chromium.headless,
+			// defaultViewport is not available on chromium.default; Puppeteer will use its own default
+			executablePath: await chromium.default.executablePath(),
+			headless: true,
 			ignoreHTTPSErrors: true,
 		};
 	}
@@ -80,7 +72,7 @@ function getLocalChromePath(): string {
 
 	switch (platform) {
 		case "win32":
-			// Windows paths (try multiple common locations)
+			// Windows paths
 			const windowsPaths = [
 				"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
 				"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
