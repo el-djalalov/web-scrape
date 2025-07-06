@@ -27,7 +27,10 @@ const PaymentSuccessModal: React.FC<PaymentSuccessModalProps> = ({
 			<DialogTrigger asChild>
 				<Button style={{ display: "none" }}></Button>
 			</DialogTrigger>
-			<DialogContent className="p-6 max-w-lg mx-auto rounded-lg shadow-lg">
+			<DialogContent
+				className="p-6 max-w-lg mx-auto rounded-lg shadow-lg"
+				aria-describedby="Payment success modal"
+			>
 				<Description></Description>
 				<DialogTitle className="text-2xl font-semibold flex items-center gap-4">
 					Payment Success{" "}

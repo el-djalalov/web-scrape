@@ -78,7 +78,10 @@ function CreateCredentialDialog({ triggerText }: { triggerText?: string }) {
 			<DialogTrigger asChild>
 				<Button> {triggerText ?? "Create"}</Button>
 			</DialogTrigger>
-			<DialogContent className="px-0">
+			<DialogContent
+				className="px-0"
+				aria-describedby="Content for creation of credential"
+			>
 				<DialogHeader className="py-4">
 					<DialogTitle>
 						<div className="flex flex-col items-center gap-2 mb-2">

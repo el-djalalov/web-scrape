@@ -91,7 +91,10 @@ function DuplicateWorkflowDialog({ workflowId }: { workflowId?: string }) {
 					<CopyIcon className="w-4 h-4 text-muted-foreground cursor-pointer" />
 				</Button>
 			</DialogTrigger>
-			<DialogContent className="px-0">
+			<DialogContent
+				className="px-0"
+				aria-describedby="Content for creation of duplicate workflow"
+			>
 				<DialogHeader className="py-4">
 					<DialogTitle>
 						<div className="flex flex-col items-center gap-2 mb-2">
