@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+	experimental: {
+		serverComponentsExternalPackages: ["@sparticuz/chromium-min"],
+	},
 	env: {
 		AUTH_GITHUB_ID: process.env.AUTH_GITHUB_ID,
 		AUTH_GITHUB_SECRET: process.env.AUTH_GITHUB_SECRET,
@@ -15,6 +18,13 @@ const nextConfig = {
 			"cdn.pixabay.com",
 			"images.unsplash.com",
 		],
+	},
+
+	webpack: (config, { isServer }) => {
+		if (isServer) {
+			config.externals = [...config.externals, "@sparticuz/chromium-min"];
+		}
+		return config;
 	},
 };
 

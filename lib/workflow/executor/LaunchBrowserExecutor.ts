@@ -48,7 +48,9 @@ async function getBrowserOptions() {
 			],
 		};
 	} else {
-		const chromium = await import("@sparticuz/chromium");
+		// Production configuration with chromium-min
+		const chromium = await import("@sparticuz/chromium-min");
+
 		return {
 			args: [
 				...chromium.default.args,
@@ -57,8 +59,14 @@ async function getBrowserOptions() {
 				"--no-sandbox",
 				"--disable-setuid-sandbox",
 				"--disable-dev-shm-usage",
+				"--disable-gpu",
+				"--single-process",
+				"--no-zygote",
 			],
-			executablePath: await chromium.default.executablePath(),
+			executablePath: await chromium.default.executablePath(
+				// Use the CDN URL for the chromium binary
+				"https://github.com/Sparticuz/chromium/releases/download/v137.0.1/chromium-v137.0.1-pack.tar"
+			),
 			headless: true,
 			ignoreHTTPSErrors: true,
 		};
