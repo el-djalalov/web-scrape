@@ -1,10 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
 	experimental: {
-		serverComponentsExternalPackages: [
-			"@sparticuz/chromium-min",
-			"puppeteer-core",
-		],
+		serverExternalPackages: ["@sparticuz/chromium-min", "puppeteer-core"],
 	},
 	env: {
 		AUTH_GITHUB_ID: process.env.AUTH_GITHUB_ID,
