@@ -103,6 +103,7 @@ export async function RunWorkFlow(form: {
 		headers: { "Content-Type": "application/json" },
 		body: JSON.stringify({ executionId: execution.id }),
 	});
+	const redirectUrl = `/workflow/runs/${workflowId}/${execution.id}`;
 
-	redirect(`/workflow/runs/${workflowId}/${execution.id}`);
+	return { redirectUrl };
 }
