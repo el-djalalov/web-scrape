@@ -49,8 +49,6 @@ export default function HomeClient({
 			const price = Number((amount / 100).toFixed(2));
 			setAmount(price);
 
-			console.log(price);
-
 			let creditsToAdd = 0;
 			if (price === 9.99) {
 				creditsToAdd = 1000;

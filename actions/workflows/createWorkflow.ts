@@ -40,8 +40,6 @@ export async function CreateWorkflow(form: createWorkflowSchemaType) {
 		},
 	});
 
-	console.log("@@ result: ", Boolean(result));
-
 	if (!result) {
 		throw new Error("Failed to create workflow");
 	}

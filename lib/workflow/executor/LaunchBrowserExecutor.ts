@@ -1,7 +1,6 @@
 import { Environment, ExecutionEnvironment } from "@/types/executor";
 import puppeteer from "puppeteer-core";
 import { LaunchBrowserTask } from "../task/LaunchBrowser";
-import chromium from "@sparticuz/chromium-min";
 
 export async function LaunchBrowserExecutor(
 	environment: ExecutionEnvironment<typeof LaunchBrowserTask>
@@ -18,10 +17,7 @@ export async function LaunchBrowserExecutor(
 		environment.setBrowser(browser);
 
 		const page = await browser.newPage();
-		const response = await page.goto(websiteUrl, { waitUntil: "networkidle0" });
-		if (response?.status() === 404) {
-			environment.log.info("Page returned 404, continuing anyway…");
-		}
+		await page.goto(websiteUrl, { waitUntil: "networkidle0" });
 		environment.setPage(page);
 		environment.log.info(`Opened page at: ${websiteUrl}`);
 
@@ -34,9 +30,10 @@ export async function LaunchBrowserExecutor(
 		return false;
 	}
 }
-export async function getBrowserOptions() {
-	// Development (runs on your laptop)
+
+async function getBrowserOptions() {
 	if (process.env.NODE_ENV === "development") {
+		// Local development configuration
 		return {
 			executablePath: getLocalChromePath(),
 			headless: true,
@@ -44,19 +41,38 @@ export async function getBrowserOptions() {
 				"--no-sandbox",
 				"--disable-setuid-sandbox",
 				"--disable-dev-shm-usage",
+				"--disable-accelerated-2d-canvas",
+				"--no-first-run",
+				"--no-zygote",
 				"--disable-gpu",
 			],
 		};
-	}
+	} else {
+		// Production configuration with chromium-min
+		const chromium = await import("@sparticuz/chromium-min");
 
-	// Production (runs on Vercel / AWS Lambda)
-	return {
-		args: chromium.args,
-		executablePath: await chromium.executablePath(),
-		headless: true,
-		ignoreHTTPSErrors: true,
-	};
+		return {
+			args: [
+				...chromium.default.args,
+				"--hide-scrollbars",
+				"--disable-web-security",
+				"--no-sandbox",
+				"--disable-setuid-sandbox",
+				"--disable-dev-shm-usage",
+				"--disable-gpu",
+				"--single-process",
+				"--no-zygote",
+			],
+			executablePath: await chromium.default.executablePath(
+				// Use the CDN URL for the chromium binary
+				"https://github.com/Sparticuz/chromium/releases/download/v137.0.1/chromium-v137.0.1-pack.tar"
+			),
+			headless: true,
+			ignoreHTTPSErrors: true,
+		};
+	}
 }
+
 function getLocalChromePath(): string {
 	const platform = process.platform;
 

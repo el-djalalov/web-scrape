@@ -43,13 +43,9 @@ function DesktopSidebar() {
 	const pathname = usePathname();
 	const { data: session } = useSession();
 
-	//console.log(session);
-
 	const activeRoute =
 		routes.find(route => route.href !== "/" && pathname.includes(route.href)) ||
 		routes[0];
-
-	console.log(activeRoute);
 
 	return (
 		<div className="hidden relative md:block min-w-[280px] max-w-[280px] h-screen overflow-hidden w-full bg-primary/5 dark:bg-secondary/30 dark:text-foreground text-muted-foreground border-r-2  border-separate">
