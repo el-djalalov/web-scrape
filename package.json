@@ -75,6 +75,7 @@
 		"next-themes": "^0.4.3",
 		"nextjs-toploader": "^3.7.15",
 		"openai": "^4.76.2",
+		"puppeteer": "^24.11.2",
 		"puppeteer-core": "^24.11.2",
 		"react": "^19.1.0",
 		"react-countup": "^6.5.3",
