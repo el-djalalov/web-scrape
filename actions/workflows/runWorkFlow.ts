@@ -98,7 +98,7 @@ export async function RunWorkFlow(form: {
 		throw new Error("Workflow execution was not created");
 	}
 
-	await fetch(`/api/executions/start`, {
+	await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/executions/start`, {
 		method: "POST",
 		headers: { "Content-Type": "application/json" },
 		body: JSON.stringify({ executionId: execution.id }),
