@@ -12,11 +12,11 @@ function RunBtn({ workflowId }: { workflowId: string }) {
 	const router = useRouter();
 	const mutation = useMutation({
 		mutationFn: RunWorkFlow,
-		onSuccess: (data: { redirectUrl: string }) => {
-			console.log(data);
+		onSuccess: ({ redirectUrl }) => {
+			console.log(redirectUrl);
 
 			toast.success("Workflow started", { id: workflowId });
-			router.push(data.redirectUrl);
+			router.push(redirectUrl);
 		},
 		onError: () => {
 			toast.error("Somethign went wrong", { id: workflowId });
