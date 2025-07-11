@@ -7,7 +7,7 @@ export async function LaunchBrowserExecutor(
 	let browser;
 	try {
 		const websiteUrl = environment.getInput("Website Url");
-		const puppeteer = await import("puppeteer-core");
+		const puppeteer = (await import("puppeteer-core")).default;
 		// Configure browser options based on environment
 		const browserOptions = await getBrowserOptions();
 

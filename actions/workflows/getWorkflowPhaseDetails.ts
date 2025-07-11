@@ -2,6 +2,8 @@
 
 import prisma from "@/lib/prisma";
 import { auth } from "@/auth";
+import { TaskRegistry } from "@/lib/workflow/task/registry";
+import { AppNode } from "@/types/appNode";
 
 export async function GetWorkflowPhaseDetails(phaseId: string) {
 	const session = await auth();
@@ -10,7 +12,7 @@ export async function GetWorkflowPhaseDetails(phaseId: string) {
 		throw new Error("Unauthenticated");
 	}
 
-	return prisma.executionPhase.findUnique({
+	const phase = await prisma.executionPhase.findUnique({
 		where: {
 			id: phaseId,
 			execution: {
@@ -25,4 +27,16 @@ export async function GetWorkflowPhaseDetails(phaseId: string) {
 			},
 		},
 	});
+
+	if (!phase) {
+		return null;
+	}
+
+	const node = JSON.parse(phase.node) as AppNode;
+	const taskName = TaskRegistry[node.data.type]?.label || "Unknown Task";
+
+	return {
+		...phase,
+		name: taskName,
+	};
 }
