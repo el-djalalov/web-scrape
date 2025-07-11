@@ -98,9 +98,7 @@ export async function RunWorkFlow(form: {
 		throw new Error("Workflow execution was not created");
 	}
 
-	setImmediate(() => {
-		ExecuteWorkflow(execution.id).catch(console.error);
-	});
+	ExecuteWorkflow(execution.id).catch(console.error);
 
 	return { redirectUrl: `/workflow/runs/${workflowId}/${execution.id}` };
 }
