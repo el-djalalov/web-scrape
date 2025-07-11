@@ -1,5 +1,4 @@
 import { Environment, ExecutionEnvironment } from "@/types/executor";
-import puppeteer from "puppeteer-core";
 import { LaunchBrowserTask } from "../task/LaunchBrowser";
 
 export async function LaunchBrowserExecutor(
@@ -8,7 +7,7 @@ export async function LaunchBrowserExecutor(
 	let browser;
 	try {
 		const websiteUrl = environment.getInput("Website Url");
-
+		const puppeteer = await import("puppeteer-core");
 		// Configure browser options based on environment
 		const browserOptions = await getBrowserOptions();
 
@@ -32,6 +31,7 @@ export async function LaunchBrowserExecutor(
 }
 
 async function getBrowserOptions() {
+	const chromium = await import("@sparticuz/chromium-min");
 	if (process.env.NODE_ENV === "development") {
 		// Local development configuration
 		return {
@@ -48,8 +48,6 @@ async function getBrowserOptions() {
 			],
 		};
 	} else {
-		const chromium = await import("@sparticuz/chromium-min");
-
 		return {
 			args: chromium.default.args,
 			executablePath: await chromium.default.executablePath(),
