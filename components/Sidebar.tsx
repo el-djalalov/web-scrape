@@ -63,7 +63,7 @@ function DesktopSidebar() {
 						className={`flex items-center w-full text-left px-4 py-2 gap-4 rounded-md transition-colors ${
 							activeRoute.href === route.href
 								? "bg-primary/10 text-primary font-medium border-l-2 border-primary"
-								: "text-muted-foreground hover:bg-primary/5 hover:text-white"
+								: "text-muted-foreground hover:bg-primary/5 hover:text-primary dark:hover:text-white"
 						}`}
 					>
 						<route.icon size={20} />
