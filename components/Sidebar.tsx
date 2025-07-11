@@ -62,34 +62,45 @@ function DesktopSidebar() {
 						href={route.href}
 						className={`flex items-center w-full text-left px-4 py-2 gap-4 rounded-md transition-colors ${
 							activeRoute.href === route.href
-								? "bg-primary/10 text-white font-medium border-l-2 border-primary"
+								? "bg-primary/10 text-primary font-medium border-l-2 border-primary"
 								: "text-muted-foreground hover:bg-primary/5 hover:text-white"
 						}`}
 					>
 						<route.icon size={20} />
-						{route.label}
+
+						<span
+							className={`${
+								activeRoute.href === route.href ? "dark:text-white" : ""
+							}`}
+						>
+							{route.label}
+						</span>
 					</Link>
 				))}
 			</div>
 			{session && (
 				<div className="absolute bottom-4 left-4 right-4">
-					<div className="flex items-center gap-2 p-2 rounded-md bg-secondary">
+					<div className="flex items-center gap-2 p-0.5 rounded-md bg-violet-500 dark:bg-black dark:text-muted-foreground text-white">
 						<Avatar>
 							<AvatarImage src={session.user?.image || ""} />
-							<AvatarFallback>{session.user?.name?.charAt(0)}</AvatarFallback>
+							<AvatarFallback className="text-primary dark:text-muted-foreground">
+								{session.user?.name?.charAt(0)}
+							</AvatarFallback>
 						</Avatar>
 						<div className="flex flex-col">
 							<span className="text-sm font-semibold">
 								{session.user?.name}
 							</span>
-							<span className="text-xs text-muted-foreground">
-								{session.user?.email}
+							<span className="text-xs text-muted-foreground text-white dark:text-muted-foreground">
+								{session.user?.name === session.user.email
+									? ""
+									: session.user.email}
 							</span>
 						</div>
 					</div>
 					<Button
 						variant="outline"
-						className="w-full mt-2"
+						className="w-full mt-2 border-2 dark:text-muted-foreground"
 						onClick={() => signOut()}
 					>
 						Sign out
