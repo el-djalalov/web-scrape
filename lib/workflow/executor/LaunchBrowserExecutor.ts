@@ -8,6 +8,7 @@ export async function LaunchBrowserExecutor(
 	try {
 		const websiteUrl = environment.getInput("Website Url");
 		const puppeteer = (await import("puppeteer-core")).default;
+
 		// Configure browser options based on environment
 		const browserOptions = await getBrowserOptions();
 
@@ -16,7 +17,17 @@ export async function LaunchBrowserExecutor(
 		environment.setBrowser(browser);
 
 		const page = await browser.newPage();
-		await page.goto(websiteUrl, { waitUntil: "networkidle0" });
+
+		// Set user agent to avoid detection
+		await page.setUserAgent(
+			"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+		);
+
+		await page.goto(websiteUrl, {
+			waitUntil: "networkidle0",
+			timeout: 30000, // 30 seconds timeout
+		});
+
 		environment.setPage(page);
 		environment.log.info(`Opened page at: ${websiteUrl}`);
 
@@ -31,7 +42,6 @@ export async function LaunchBrowserExecutor(
 }
 
 async function getBrowserOptions() {
-	const chromium = await import("@sparticuz/chromium-min");
 	if (process.env.NODE_ENV === "development") {
 		// Local development configuration
 		return {
@@ -48,9 +58,19 @@ async function getBrowserOptions() {
 			],
 		};
 	} else {
+		// Production configuration for Vercel
+		const chromium = await import("@sparticuz/chromium-min");
+
 		return {
-			args: chromium.default.args,
-			executablePath: await chromium.default.executablePath(),
+			args: [
+				...chromium.default.args,
+				"--hide-scrollbars",
+				"--disable-web-security",
+				"--disable-features=VizDisplayCompositor",
+			],
+			executablePath: await chromium.default.executablePath(
+				"https://github.com/Sparticuz/chromium/releases/download/v123.0.1/chromium-v123.0.1-pack.tar"
+			),
 			headless: true,
 			ignoreHTTPSErrors: true,
 		};

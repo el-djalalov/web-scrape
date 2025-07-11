@@ -27,7 +27,7 @@ export async function RunWorkFlow(form: {
 	const { workflowId, flowDefination } = form;
 
 	if (!workflowId) {
-		throw new Error("Workdlow id is required");
+		throw new Error("Workflow id is required");
 	}
 
 	const workflow = await prisma.workflow.findUnique({
@@ -40,8 +40,10 @@ export async function RunWorkFlow(form: {
 	if (!workflow) {
 		throw new Error("Workflow is not found");
 	}
+
 	let executionPlan: WorkflowExecutionPlan;
 	let workflowDefination = flowDefination;
+
 	if (workflow.status === WorkflowStatus.PUBLISHED) {
 		if (!workflow.executionPlan) {
 			throw new Error("No execution plan found in published workflow");
@@ -98,7 +100,10 @@ export async function RunWorkFlow(form: {
 		throw new Error("Workflow execution was not created");
 	}
 
-	ExecuteWorkflow(execution.id).catch(console.error);
+	// Use setTimeout to avoid blocking the server action
+	setTimeout(() => {
+		ExecuteWorkflow(execution.id).catch(console.error);
+	}, 0);
 
 	return { redirectUrl: `/workflow/runs/${workflowId}/${execution.id}` };
 }
