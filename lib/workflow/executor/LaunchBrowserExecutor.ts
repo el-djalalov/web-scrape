@@ -59,16 +59,16 @@ async function getBrowserOptions() {
 		};
 	} else {
 		// Production configuration for Vercel
-		const chromium = await import("@sparticuz/chromium-min");
+		const chromium = (await import("@sparticuz/chromium")).default;
 
 		return {
 			args: [
-				...chromium.default.args,
+				...chromium.args,
 				"--hide-scrollbars",
 				"--disable-web-security",
 				"--disable-features=VizDisplayCompositor",
 			],
-			executablePath: await chromium.default.executablePath(
+			executablePath: await chromium.executablePath(
 				"https://github.com/Sparticuz/chromium/releases/download/v123.0.1/chromium-v123.0.1-pack.tar"
 			),
 			headless: true,
