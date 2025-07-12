@@ -59,7 +59,10 @@ async function getBrowserOptions() {
 		};
 	} else {
 		// Production configuration for Vercel
-		const chromium = (await import("@sparticuz/chromium")).default;
+		const chromium = await Function(
+			"return import('@sparticuz/' + 'chromium-min')"
+		)() // string concatenation breaks webpack’s static analysis
+			.then((m: { default: any }) => m.default);
 
 		return {
 			args: [
