@@ -4,6 +4,7 @@ import prisma from "@/lib/prisma";
 import { WorkflowStatus } from "@/types/workflow";
 import { auth } from "@/auth";
 import { revalidatePath } from "next/cache";
+import { revalidateWorkflowCache } from "@/lib/cache/revalidate";
 
 export async function UnPublishWorkflow(id: string) {
 	const session = await auth();
@@ -40,4 +41,5 @@ export async function UnPublishWorkflow(id: string) {
 	});
 
 	revalidatePath(`/workflow/editor/${id}`);
+	await revalidateWorkflowCache(session.user.id);
 }

@@ -3,6 +3,7 @@
 import prisma from "@/lib/prisma";
 import { auth } from "@/auth";
 import { revalidatePath } from "next/cache";
+import { revalidateWorkflowCache } from "@/lib/cache/revalidate";
 
 export async function DeleteWorkflow(id: string) {
 	const session = await auth();
@@ -15,5 +16,8 @@ export async function DeleteWorkflow(id: string) {
 			userId: session.user.id,
 		},
 	});
+
+	// Invalidate both path and cache
 	revalidatePath("/workflows");
+	await revalidateWorkflowCache(session.user.id);
 }

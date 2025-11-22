@@ -7,10 +7,34 @@ import { ExecutionPhaseStatus } from "@/types/workflow";
 import { auth } from "@/auth";
 import { eachDayOfInterval } from "date-fns";
 import { format } from "date-fns";
+import { cache } from "react";
 
 type Stats = Record<string, { success: number; failed: number }>;
 
 const { COMPLETED, FAILED } = ExecutionPhaseStatus;
+
+// Use React.cache() for request memoization
+const getExecutionPhasesFromDb = cache(
+	async (
+		userId: string,
+		startDate: Date,
+		endDate: Date,
+		statuses: string[]
+	) => {
+		return prisma.executionPhase.findMany({
+			where: {
+				userId,
+				startedAt: {
+					gte: startDate,
+					lte: endDate,
+				},
+				status: {
+					in: statuses,
+				},
+			},
+		});
+	}
+);
 
 export async function GetCreditsUsage(period: Period) {
 	const session = await auth();
@@ -21,18 +45,12 @@ export async function GetCreditsUsage(period: Period) {
 
 	const dateRange = PeriodToDateRange(period);
 
-	const executionsPhases = await prisma.executionPhase.findMany({
-		where: {
-			userId: session.user.id,
-			startedAt: {
-				gte: dateRange.startDate,
-				lte: dateRange.endDate,
-			},
-			status: {
-				in: [COMPLETED, FAILED],
-			},
-		},
-	});
+	const executionsPhases = await getExecutionPhasesFromDb(
+		session.user.id,
+		dateRange.startDate,
+		dateRange.endDate,
+		[COMPLETED, FAILED]
+	);
 
 	const dateFormat = "yyyy-MM-dd";
 

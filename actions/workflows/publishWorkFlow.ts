@@ -6,6 +6,7 @@ import { CalculateWorkflowCost } from "@/lib/workflow/helpers";
 import { WorkflowStatus } from "@/types/workflow";
 import { auth } from "@/auth";
 import { revalidatePath } from "next/cache";
+import { revalidateWorkflowCache } from "@/lib/cache/revalidate";
 
 export async function PublishWorkFlow({
 	id,
@@ -60,4 +61,5 @@ export async function PublishWorkFlow({
 	});
 
 	revalidatePath(`/workflow/editor/${id}`);
+	await revalidateWorkflowCache(session.user.id);
 }

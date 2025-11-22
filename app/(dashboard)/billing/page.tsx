@@ -5,8 +5,17 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { CoinsIcon } from "lucide-react";
 import { Suspense } from "react";
 import CreditsPurchase from "./_components/CreditsPurchase";
+import { preloadStripe } from "@/lib/preload";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+	title: "Billing",
+	description: "Manage your credits and billing information.",
+};
 
 export default function BillingPage() {
+	// Preload Stripe resources early for faster checkout
+	preloadStripe();
 	return (
 		<div className="mx-auto p-4 space-y-8">
 			<h1 className="text-3xl font-bold">Billing</h1>

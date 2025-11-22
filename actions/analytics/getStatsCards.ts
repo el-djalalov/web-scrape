@@ -5,6 +5,59 @@ import prisma from "@/lib/prisma";
 import { Period } from "@/types/analytics";
 import { WorkflowExecutionStatus } from "@/types/workflow";
 import { auth } from "@/auth";
+import { cache } from "react";
+import { unstable_cache } from "next/cache";
+
+// Use React.cache() for request memoization
+// Prevents redundant database queries within the same request
+const getStatsFromDb = cache(
+	async (
+		userId: string,
+		startDate: Date,
+		endDate: Date,
+		statuses: string[]
+	) => {
+		const getCachedStats = unstable_cache(
+			async () => {
+				return prisma.workflowExecution.findMany({
+					where: {
+						userId,
+						startedAt: {
+							gte: startDate,
+							lte: endDate,
+						},
+						status: {
+							in: statuses,
+						},
+					},
+					select: {
+						creditsConsumed: true,
+						phases: {
+							where: {
+								creditsConsumed: {
+									not: null,
+								},
+							},
+							select: { creditsConsumed: true },
+						},
+					},
+				});
+			},
+			[
+				"stats-cards",
+				userId,
+				startDate.toISOString(),
+				endDate.toISOString(),
+			],
+			{
+				tags: [`stats-${userId}`, "analytics"],
+				revalidate: 300, // Revalidate every 5 minutes
+			}
+		);
+
+		return getCachedStats();
+	}
+);
 
 export default async function GetStatsCardsValues(period: Period) {
 	const session = await auth();
@@ -17,29 +70,12 @@ export default async function GetStatsCardsValues(period: Period) {
 
 	const dateRange = PeriodToDateRange(period);
 
-	const executions = await prisma.workflowExecution.findMany({
-		where: {
-			userId: session.user.id,
-			startedAt: {
-				gte: dateRange.startDate,
-				lte: dateRange.endDate,
-			},
-			status: {
-				in: [COMPLETED, FAILED],
-			},
-		},
-		select: {
-			creditsConsumed: true,
-			phases: {
-				where: {
-					creditsConsumed: {
-						not: null,
-					},
-				},
-				select: { creditsConsumed: true },
-			},
-		},
-	});
+	const executions = await getStatsFromDb(
+		session.user.id,
+		dateRange.startDate,
+		dateRange.endDate,
+		[COMPLETED, FAILED]
+	);
 
 	const stats = {
 		workflowExecutions: executions.length,

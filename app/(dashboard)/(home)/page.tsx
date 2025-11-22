@@ -3,6 +3,13 @@ import { GetPeriods } from "@/actions/analytics/getPeriods";
 import GetStatsCardsValues from "@/actions/analytics/getStatsCards";
 import { GetWorkflowExecutionStats } from "@/actions/analytics/GetWorkflowExecutionStats";
 import { GetCreditsUsage } from "@/actions/analytics/GetCreditUsage";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+	title: "Dashboard",
+	description:
+		"View your workflow analytics, execution stats, and credit usage.",
+};
 
 interface SearchParams {
 	month?: string;

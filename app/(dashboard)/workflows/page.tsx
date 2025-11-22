@@ -6,6 +6,13 @@ import { AlertCircle, InboxIcon } from "lucide-react";
 import CreateWorkflowDialog from "./_components/CreateWorkflowDialog";
 import WorkflowCard from "./_components/WorkflowCard";
 import { Workflow } from "@prisma/client";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+	title: "Workflows",
+	description:
+		"Manage your automated workflows. Create, edit, and schedule web scraping workflows.",
+};
 
 function page() {
 	return (
