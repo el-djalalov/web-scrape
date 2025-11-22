@@ -3,6 +3,7 @@ import Topbar from "../../_components/topbar/Topbar";
 import { Suspense } from "react";
 import { InboxIcon, Loader2Icon } from "lucide-react";
 import ExecutionsTable from "./_components/ExecutionsTable";
+import { CleanupButton } from "./_components/CleanupButton";
 
 export default async function ExecutionPage({
 	params,
@@ -59,7 +60,10 @@ async function ExecutionsTableWrapper({ workflowId }: { workflowId: string }) {
 	}
 
 	return (
-		<div className="container py-6 w-full">
+		<div className="container py-6 w-full space-y-4">
+			<div className="flex justify-end">
+				<CleanupButton />
+			</div>
 			<ExecutionsTable workflowId={workflowId} initialData={executions} />
 		</div>
 	);

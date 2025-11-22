@@ -15,9 +15,12 @@ import { DatesToDurationString } from "@/lib/helper/dates";
 import { Badge } from "@/components/ui/badge";
 import { ExecutionStatusIndicator } from "./ExecutionStatusIndicator";
 import { WorkflowExecutionStatus } from "@/types/workflow";
-import { CoinsIcon } from "lucide-react";
+import { CoinsIcon, StopCircle } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { StopExecution } from "@/actions/workflows/stopExecution";
+import { toast } from "sonner";
 type InitialDataType = Awaited<ReturnType<typeof GetWorkflowExecutions>>;
 
 function ExecutionsTable({
@@ -35,6 +38,21 @@ function ExecutionsTable({
 		refetchInterval: 5000,
 	});
 
+	const handleStopExecution = async (
+		e: React.MouseEvent,
+		executionId: string
+	) => {
+		e.stopPropagation();
+		try {
+			await StopExecution(executionId);
+			toast.success("Execution stopped successfully");
+			query.refetch();
+		} catch (error) {
+			toast.error("Failed to stop execution");
+			console.error(error);
+		}
+	};
+
 	return (
 		<div className="border rounded-lg shadow-md overflow-auto">
 			<Table className="h-full">
@@ -44,6 +62,7 @@ function ExecutionsTable({
 						<TableHead>Status</TableHead>
 						<TableHead>Consumed</TableHead>
 						<TableHead className="text-right">Started at</TableHead>
+						<TableHead className="text-right">Actions</TableHead>
 					</TableRow>
 				</TableHeader>
 
@@ -108,6 +127,18 @@ function ExecutionsTable({
 								</TableCell>
 								<TableCell className="text-right text-muted-foreground">
 									{formattedStartedAt}
+								</TableCell>
+								<TableCell className="text-right">
+									{execution.status === WorkflowExecutionStatus.RUNNING && (
+										<Button
+											variant="destructive"
+											size="sm"
+											onClick={e => handleStopExecution(e, execution.id)}
+										>
+											<StopCircle className="h-4 w-4 mr-1" />
+											Stop
+										</Button>
+									)}
 								</TableCell>
 							</TableRow>
 						);

@@ -1,11 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-	experimental: {
-		serverExternalPackages: ["@sparticuz/chromium", "puppeteer-core"],
-	},
 	webpack(config, { isServer }) {
 		if (isServer) {
-			// don’t bundle them, just require() at runtime
+			// don't bundle them, just require() at runtime
 			config.externals.push("@sparticuz/chromium", "puppeteer-core");
 		}
 		return config;
