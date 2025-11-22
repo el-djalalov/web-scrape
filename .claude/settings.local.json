@@ -5,7 +5,10 @@
       "Bash(npm install)",
       "Bash(ls:*)",
       "Bash(mkdir:*)",
-      "Bash(npx prisma generate:*)"
+      "Bash(npx prisma generate:*)",
+      "Bash(yarn cache clean:*)",
+      "Bash(yarn install)",
+      "Bash(yarn add:*)"
     ],
     "deny": [],
     "ask": []
