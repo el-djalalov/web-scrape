@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { useFormStatus } from "react-dom";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
@@ -7,7 +8,7 @@ import { type ButtonProps } from "@/components/ui/button";
 
 interface SubmitButtonProps extends ButtonProps {
 	pendingText?: string;
-	children: React.ReactNode;
+	children: ReactNode;
 }
 
 /**

@@ -82,7 +82,10 @@ function DesktopSidebar() {
 				<div className="absolute bottom-4 left-4 right-4">
 					<div className="flex items-center gap-2 p-0.5 rounded-md bg-violet-500 dark:bg-black dark:text-muted-foreground text-white">
 						<Avatar>
-							<AvatarImage src={session.user?.image || ""} />
+							<AvatarImage
+								src={session.user?.image || ""}
+								alt={`${session.user?.name || "User"}'s profile picture`}
+							/>
 							<AvatarFallback className="text-primary dark:text-muted-foreground">
 								{session.user?.name?.charAt(0)}
 							</AvatarFallback>
@@ -155,7 +158,10 @@ export function MobileSideBar() {
 							<div className="absolute bottom-4 left-4 right-4">
 								<div className="flex items-center gap-2 p-2 rounded-md bg-secondary">
 									<Avatar>
-										<AvatarImage src={session.user?.image || ""} />
+										<AvatarImage
+											src={session.user?.image || ""}
+											alt={`${session.user?.name || "User"}'s profile picture`}
+										/>
 										<AvatarFallback>
 											{session.user?.name?.charAt(0)}
 										</AvatarFallback>

@@ -17,11 +17,13 @@ function Logo({
 				"text-2xl font-extrabold flex items-center gap-2",
 				fontSize
 			)}
+			aria-label="WebScrape - Go to home page"
 		>
 			<div className="rounded-xl bg-gradient-to-r from-primary/90 to-primary/100 p-2">
 				<SquareDashedMousePointerIcon
 					size={iconSize}
 					className="stroke-white"
+					aria-hidden="true"
 				/>
 			</div>
 			<div>

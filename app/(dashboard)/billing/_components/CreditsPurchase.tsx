@@ -31,13 +31,9 @@ import { CoinsIcon, CreditCard } from "lucide-react";
 import React, { useState } from "react";
 import CheckoutPage from "./CheckoutPage";
 
-if (process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY === undefined) {
-	throw new Error(
-		"NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY is not defined. Please set it in your environment variables."
-	);
-}
-
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY!);
+const stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY
+	? loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY)
+	: null;
 
 function CreditsPurchase() {
 	const [selectedPack, setSelectedPack] = useState(PackId.MEDIUM);

@@ -20,7 +20,11 @@
       "Bash(npm install:*)",
       "Bash(./node_modules/.bin/tsc:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(grep:*)",
+      "Bash(find:*)",
+      "Bash(export POSTGRES_URL=\"postgres://5aa88f3627ec18460aea6f4dc61f738a0fd38c16393d1ef0c85f38ead7202e3e:sk_vbhTJrz6WdjmIQqtFb8An@db.prisma.io:5432/?sslmode=require\")",
+      "Bash(npm run build:*)"
     ],
     "deny": [],
     "ask": []
