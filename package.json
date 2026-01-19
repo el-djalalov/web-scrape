@@ -9,7 +9,6 @@
     "build": "npx prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "prisma generate",
     "db:migrate": "prisma migrate dev --name init",
     "db:studio": "npx prisma studio"
   },
