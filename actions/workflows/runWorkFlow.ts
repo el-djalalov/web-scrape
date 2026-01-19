@@ -13,6 +13,8 @@ import {
 } from "@/types/workflow";
 import { auth } from "@/auth";
 import { safeJsonParse } from "@/lib/utils/safeJsonParse";
+import { AppNode } from "@/types/appNode";
+import { Edge } from "@xyflow/react";
 
 export async function RunWorkFlow(form: {
 	workflowId: string;
@@ -59,7 +61,7 @@ export async function RunWorkFlow(form: {
 		if (!flowDefination) {
 			throw new Error("Flow defination is not defined");
 		}
-		const flow = safeJsonParse<{ nodes: unknown[]; edges: unknown[] }>(flowDefination);
+		const flow = safeJsonParse<{ nodes: AppNode[]; edges: Edge[] }>(flowDefination);
 		if (!flow) {
 			throw new Error("Failed to parse flow definition");
 		}

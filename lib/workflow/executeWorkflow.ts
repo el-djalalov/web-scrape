@@ -154,7 +154,7 @@ async function finilizeWorkflowExecution(
 				lastRunStatus: finalStatus,
 			},
 		})
-		.catch(err => {
+		.catch((err: unknown) => {
 			log.error("Failed to update workflow last run status", { error: String(err) });
 		});
 }
@@ -313,7 +313,7 @@ async function cleanupEnv(environment: Environment) {
 	if (environment.browser) {
 		await environment.browser
 			.close()
-			.catch(err => console.error("Cannot close browser. Reason: ", err));
+			.catch(err => log.error("Cannot close browser", { error: String(err) }));
 	}
 }
 
@@ -329,7 +329,7 @@ async function decrementCredits(
 		});
 		return true;
 	} catch (error) {
-		console.error("Error decrementing credits:", error);
+		log.error("Error decrementing credits", { error: String(error) });
 		logCollector.error("Insufficent balance");
 		return false;
 	}
