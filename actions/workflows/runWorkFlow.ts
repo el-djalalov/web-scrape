@@ -12,7 +12,7 @@ import {
 	WorkflowStatus,
 } from "@/types/workflow";
 import { auth } from "@/auth";
-import { redirect } from "next/navigation";
+import { safeJsonParse } from "@/lib/utils/safeJsonParse";
 
 export async function RunWorkFlow(form: {
 	workflowId: string;
@@ -48,14 +48,21 @@ export async function RunWorkFlow(form: {
 		if (!workflow.executionPlan) {
 			throw new Error("No execution plan found in published workflow");
 		}
-		executionPlan = JSON.parse(workflow.executionPlan);
+		const parsedPlan = safeJsonParse<WorkflowExecutionPlan>(workflow.executionPlan);
+		if (!parsedPlan) {
+			throw new Error("Failed to parse execution plan");
+		}
+		executionPlan = parsedPlan;
 		workflowDefination = workflow.defination;
 	} else {
 		// Workflow is a draft
 		if (!flowDefination) {
 			throw new Error("Flow defination is not defined");
 		}
-		const flow = JSON.parse(flowDefination);
+		const flow = safeJsonParse<{ nodes: unknown[]; edges: unknown[] }>(flowDefination);
+		if (!flow) {
+			throw new Error("Failed to parse flow definition");
+		}
 		const result = FlowToExecutionPlan(flow.nodes, flow.edges);
 		if (result.error) {
 			throw new Error("Flow defination was not valid");
@@ -100,10 +107,29 @@ export async function RunWorkFlow(form: {
 		throw new Error("Workflow execution was not created");
 	}
 
-	// Use setTimeout to avoid blocking the server action
-	setTimeout(() => {
-		ExecuteWorkflow(execution.id).catch(console.error);
-	}, 0);
+	// Trigger workflow execution via internal API endpoint
+	// This is more reliable than setTimeout in serverless environments
+	triggerWorkflowExecution(execution.id);
 
 	return { redirectUrl: `/workflow/runs/${workflowId}/${execution.id}` };
+}
+
+/**
+ * Triggers workflow execution asynchronously via the internal API.
+ * Uses fetch to call the execute endpoint, which allows the server action
+ * to return immediately while execution continues in the background.
+ */
+function triggerWorkflowExecution(executionId: string) {
+	const executeUrl = `${process.env.NEXT_PUBLIC_APP_URL}/api/workflows/execute`;
+
+	fetch(executeUrl, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+			Authorization: `Bearer ${process.env.API_SECRET}`,
+		},
+		body: JSON.stringify({ executionId }),
+	}).catch(error => {
+		console.error("Failed to trigger workflow execution:", error);
+	});
 }

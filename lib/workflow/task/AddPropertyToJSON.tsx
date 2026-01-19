@@ -2,9 +2,9 @@ import { TaskParamType, TaskType } from "@/types/task";
 import { WorkflowTask } from "@/types/workflow";
 import { DatabaseIcon } from "lucide-react";
 
-export const AddProprertyToJSONTask = {
+export const AddPropertyToJSONTask = {
 	type: TaskType.ADD_PROPERTY_TO_JSON,
-	label: "Add proprty to JSON",
+	label: "Add property to JSON",
 	icon: props => (
 		<DatabaseIcon className="stroke-rose-500 w-5 h-5" {...props} />
 	),

@@ -9,7 +9,7 @@ import { ClickElementExecutor } from "./ClickElementExecutor";
 import { WaitForElementExecutor } from "./WaitForElementExecutor";
 import { DeliverViaWebHookExecutor } from "./DeliverViaWebHookExecutor";
 import { ExtractDataWithAiExecutor } from "./ExtractDataWithAiExecutor";
-import { ReeadPropertyFromJsonExecutor } from "./ReeadPropertyFromJsonExecutor";
+import { ReadPropertyFromJsonExecutor } from "./ReadPropertyFromJsonExecutor";
 import { AddPropertyToJsonExecutor } from "./AddPropertyToJsonExecutor";
 import { NavigateUrlExecutor } from "./NavigateUrlExecutor";
 import { ScrollToElementExecutor } from "./ScrollToElementExecutor";
@@ -31,7 +31,7 @@ export const ExecutorRegistry: RegistryType = {
 	WAIT_FOR_ELEMENT: WaitForElementExecutor,
 	DELIVER_VIA_WEBHOOK: DeliverViaWebHookExecutor,
 	EXTRACT_DATA_WITH_AI: ExtractDataWithAiExecutor,
-	READ_PROPERTY_FROM_JSON: ReeadPropertyFromJsonExecutor,
+	READ_PROPERTY_FROM_JSON: ReadPropertyFromJsonExecutor,
 	ADD_PROPERTY_TO_JSON: AddPropertyToJsonExecutor,
 	NAVIGATE_URL: NavigateUrlExecutor,
 	SCROLL_TO_ELELEMENT: ScrollToElementExecutor,

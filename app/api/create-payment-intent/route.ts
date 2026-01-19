@@ -1,14 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+import Stripe from "stripe";
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+	apiVersion: "2025-02-24.acacia",
+});
 
 export async function POST(request: NextRequest) {
 	try {
 		const { amount } = await request.json();
+
+		// Validate amount is a positive number
+		if (typeof amount !== "number" || amount <= 0) {
+			return NextResponse.json(
+				{ error: "Invalid amount" },
+				{ status: 400 }
+			);
+		}
+
+		// Amount is already in cents from CreditsPacks (e.g., 999 = $9.99)
 		const paymentIntent = await stripe.paymentIntents.create({
-			amount: amount / 100,
+			amount: amount,
 			currency: "usd",
 			automatic_payment_methods: {
-				// Detects from browser which payment method is available
 				enabled: true,
 			},
 		});
@@ -17,6 +30,9 @@ export async function POST(request: NextRequest) {
 		});
 	} catch (error) {
 		console.error("Error creating payment intent:", error);
-		return new Response("Internal Server Error", { status: 500 });
+		return NextResponse.json(
+			{ error: "Failed to create payment intent" },
+			{ status: 500 }
+		);
 	}
 }

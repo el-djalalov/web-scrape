@@ -4,8 +4,9 @@ import prisma from "../prisma";
 import {
 	ExecutionPhaseStatus,
 	WorkflowExecutionStatus,
+	WorkflowTask,
 } from "@/types/workflow";
-import { ExecutionPhase } from "@prisma/client";
+import { ExecutionPhase, Workflow, WorkflowExecution } from "@prisma/client";
 import { AppNode } from "@/types/appNode";
 import { TaskRegistry } from "./task/registry";
 import { TaskParamType } from "@/types/task";
@@ -15,6 +16,15 @@ import { Browser, Page } from "puppeteer-core";
 import { Edge } from "@xyflow/react";
 import { LogCollector } from "@/types/log";
 import { createLogCollector } from "../log";
+import { safeJsonParse } from "../utils/safeJsonParse";
+import { createLogger } from "../utils/logger";
+
+const log = createLogger("workflow-executor");
+
+type ExecutionWithRelations = WorkflowExecution & {
+	workflow: Workflow;
+	phases: ExecutionPhase[];
+};
 
 export async function ExecuteWorkflow(executionId: string, nextRunAt?: Date) {
 	const execution = await prisma.workflowExecution.findUnique({
@@ -26,7 +36,11 @@ export async function ExecuteWorkflow(executionId: string, nextRunAt?: Date) {
 		throw new Error("Execution not found");
 	}
 
-	const edges = JSON.parse(execution.definition).edges as Edge[];
+	const definition = safeJsonParse<{ edges: Edge[] }>(execution.definition ?? "");
+	if (!definition) {
+		throw new Error("Invalid workflow definition: failed to parse JSON");
+	}
+	const edges = definition.edges;
 	//Execution env
 	const environment: Environment = {
 		phases: {},
@@ -98,11 +112,11 @@ async function initializeWorkflowExecution(
 	});
 }
 
-async function initializePhasesStatus(execution: any) {
+async function initializePhasesStatus(execution: ExecutionWithRelations) {
 	await prisma.executionPhase.updateMany({
 		where: {
 			id: {
-				in: execution.phases.map((phase: any) => phase.id),
+				in: execution.phases.map(phase => phase.id),
 			},
 		},
 		data: {
@@ -141,7 +155,7 @@ async function finilizeWorkflowExecution(
 			},
 		})
 		.catch(err => {
-			console.error("Failed to update workflow last run status. Reason: ", err);
+			log.error("Failed to update workflow last run status", { error: String(err) });
 		});
 }
 
@@ -153,7 +167,12 @@ async function executeWorkflowPhase(
 ) {
 	const logCollector = createLogCollector();
 	const startedAt = new Date();
-	const node = JSON.parse(phase.node) as AppNode;
+	const node = safeJsonParse<AppNode>(phase.node);
+
+	if (!node) {
+		logCollector.error(`Failed to parse phase node: invalid JSON`);
+		return { success: false, creditsConsumed: 0 };
+	}
 
 	setupEnvironmentForPhase(node, environment, edges);
 
@@ -191,7 +210,7 @@ async function executeWorkflowPhase(
 async function finilizePhase(
 	phaseId: string,
 	success: boolean,
-	outputs: any,
+	outputs: Record<string, string>,
 	logCollector: LogCollector,
 	creditsConsumed: number
 ) {
@@ -232,8 +251,7 @@ async function executePhase(
 		return false;
 	}
 
-	const executionEnvironment: ExecutionEnvironment<any> =
-		createExecutionEnvironment(node, environment, logCollector);
+	const executionEnvironment = createExecutionEnvironment(node, environment, logCollector);
 
 	return await runFn(executionEnvironment);
 }
@@ -261,7 +279,7 @@ function setupEnvironmentForPhase(
 		);
 
 		if (!connectedEdge) {
-			console.error("Missing edges for input", input.name, "node ID", node.id);
+			log.warn("Missing edges for input", { inputName: input.name, nodeId: node.id });
 			continue;
 		}
 		const outputValue =
@@ -275,8 +293,8 @@ function setupEnvironmentForPhase(
 function createExecutionEnvironment(
 	node: AppNode,
 	environment: Environment,
-	LogCollector: LogCollector
-): ExecutionEnvironment<any> {
+	logCollector: LogCollector
+): ExecutionEnvironment<WorkflowTask> {
 	return {
 		getInput: (name: string) => environment.phases[node.id]?.inputs[name],
 		setOutput: (name: string, value: string) => {
@@ -284,10 +302,10 @@ function createExecutionEnvironment(
 		},
 
 		getBrowser: () => environment.browser,
-		setBrowser: (bowser: Browser) => (environment.browser = bowser),
+		setBrowser: (browser: Browser) => (environment.browser = browser),
 		getPage: () => environment.page,
 		setPage: (page: Page) => (environment.page = page),
-		log: LogCollector,
+		log: logCollector,
 	};
 }
 

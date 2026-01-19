@@ -1,5 +1,6 @@
-import { Environment, ExecutionEnvironment } from "@/types/executor";
+import { ExecutionEnvironment } from "@/types/executor";
 import { LaunchBrowserTask } from "../task/LaunchBrowser";
+import { validateBrowserUrl } from "@/lib/utils/urlValidation";
 
 export async function LaunchBrowserExecutor(
 	environment: ExecutionEnvironment<typeof LaunchBrowserTask>
@@ -7,6 +8,19 @@ export async function LaunchBrowserExecutor(
 	let browser;
 	try {
 		const websiteUrl = environment.getInput("Website Url");
+
+		if (!websiteUrl) {
+			environment.log.error("Website URL not provided");
+			return false;
+		}
+
+		// Validate URL to prevent dangerous schemes
+		const urlValidation = validateBrowserUrl(websiteUrl);
+		if (!urlValidation.valid) {
+			environment.log.error(`Invalid URL: ${urlValidation.error}`);
+			return false;
+		}
+
 		const puppeteer = (await import("puppeteer-core")).default;
 
 		// Configure browser options based on environment

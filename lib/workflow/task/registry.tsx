@@ -9,7 +9,7 @@ import { WaitForElementTask } from "./WaitForElement";
 import { DeliverViaWebHookTask } from "./DeliverViaWebHook";
 import { ExtractDataWithAiTask } from "./ExtractDataWithAi";
 import { ReadPropertyFromJSONTask } from "./ReadPropertyFromJSON";
-import { AddProprertyToJSONTask } from "./AddProprertyToJSON";
+import { AddPropertyToJSONTask } from "./AddPropertyToJSON";
 import { NavigateUrlTask } from "./NavigateUrl";
 import { ScrollToElementTask } from "./ScrollToElement";
 
@@ -27,7 +27,7 @@ export const TaskRegistry: Registry = {
 	DELIVER_VIA_WEBHOOK: DeliverViaWebHookTask,
 	EXTRACT_DATA_WITH_AI: ExtractDataWithAiTask,
 	READ_PROPERTY_FROM_JSON: ReadPropertyFromJSONTask,
-	ADD_PROPERTY_TO_JSON: AddProprertyToJSONTask,
+	ADD_PROPERTY_TO_JSON: AddPropertyToJSONTask,
 	NAVIGATE_URL: NavigateUrlTask,
 	SCROLL_TO_ELELEMENT: ScrollToElementTask,
 };
