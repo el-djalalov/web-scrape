@@ -13,11 +13,17 @@ const compat = new FlatCompat({
 export default defineConfig([
   js.configs.recommended, // It's good practice to include ESLint's own recommendations
   ...compat.extends("next/core-web-vitals"),
+  ...compat.extends("plugin:jsx-a11y/recommended"),
 
   {
     rules: {
       // Your custom rules
       'no-unused-vars': 'off',
+      // Accessibility rules
+      'jsx-a11y/alt-text': 'error',
+      'jsx-a11y/anchor-is-valid': 'warn',
+      'jsx-a11y/click-events-have-key-events': 'warn',
+      'jsx-a11y/no-static-element-interactions': 'warn',
     },
   },
 ]);

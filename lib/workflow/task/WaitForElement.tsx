@@ -11,7 +11,7 @@ export const WaitForElementTask = {
 	inputs: [
 		{
 			name: "Web page",
-			type: TaskParamType.BROWSER_INTANCE,
+			type: TaskParamType.BROWSER_INSTANCE,
 			required: true,
 		},
 		{
@@ -33,7 +33,7 @@ export const WaitForElementTask = {
 	outputs: [
 		{
 			name: "Web page",
-			type: TaskParamType.BROWSER_INTANCE,
+			type: TaskParamType.BROWSER_INSTANCE,
 		},
 	] as const,
 } satisfies WorkflowTask;

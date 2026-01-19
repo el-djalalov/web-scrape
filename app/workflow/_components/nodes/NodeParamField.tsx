@@ -45,7 +45,7 @@ function NodeParamField({
 					disabled={disabled}
 				/>
 			);
-		case TaskParamType.BROWSER_INTANCE:
+		case TaskParamType.BROWSER_INSTANCE:
 			return (
 				<BrowserInstanceParam
 					param={param}

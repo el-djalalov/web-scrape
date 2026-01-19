@@ -46,7 +46,7 @@ const CheckoutPage = ({ amount }: { amount: number }) => {
 			elements,
 			clientSecret: clientSecret ?? "",
 			confirmParams: {
-				return_url: `http://localhost:3000/?amount=${amount}`,
+				return_url: `${process.env.NEXT_PUBLIC_APP_URL}/?amount=${amount}`,
 			},
 		});
 

@@ -9,8 +9,31 @@ import {
   ExecutionPhaseStatus,
 } from "@/types/workflow";
 import parser from "cron-parser";
+import { timingSafeEqual } from "crypto";
 
-export async function GET() {
+function isValidSecret(secret: string): boolean {
+  const API_SECRET = process.env.API_SECRET;
+
+  if (!API_SECRET) return false;
+
+  try {
+    return timingSafeEqual(Buffer.from(secret), Buffer.from(API_SECRET));
+  } catch {
+    return false;
+  }
+}
+
+export async function GET(request: Request) {
+  const authHeader = request.headers.get("authorization");
+
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const secret = authHeader.split(" ")[1];
+  if (!isValidSecret(secret)) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
   const { default: prisma } = await import("@/lib/prisma");
   const { TaskRegistry } = await import("@/lib/workflow/task/registry");
   const { ExecuteWorkflow } = await import("@/lib/workflow/executeWorkflow");
@@ -37,7 +60,7 @@ export async function GET() {
   for (const wf of dueWorkflows) {
     try {
       if (!wf.executionPlan || !wf.cron || !wf.userId) {
-        `Workflow ${wf.id} is missing necessary data (executionPlan, cron, or userId). Skipping.`;
+        console.warn(`Workflow ${wf.id} is missing necessary data (executionPlan, cron, or userId). Skipping.`);
         continue;
       }
       const executionPlan = JSON.parse(
@@ -76,7 +99,7 @@ export async function GET() {
         },
       });
 
-      ExecuteWorkflow(execution.id, nextRunForThisWorkflow);
+      await ExecuteWorkflow(execution.id, nextRunForThisWorkflow);
       executionsStarted++;
 
       await prisma.workflow.update({

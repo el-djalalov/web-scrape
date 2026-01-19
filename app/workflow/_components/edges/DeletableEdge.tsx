@@ -37,8 +37,9 @@ function DeletableEdge(props: EdgeProps) {
 						onClick={() => {
 							setEdges(edges => edges.filter(edge => edge.id !== props.id));
 						}}
+						aria-label="Delete connection"
 					>
-						<XIcon />
+						<XIcon aria-hidden="true" />
 					</Button>
 				</div>
 			</EdgeLabelRenderer>

@@ -55,14 +55,17 @@ function ExecutionsTable({
 
 	return (
 		<div className="border rounded-lg shadow-md overflow-auto">
-			<Table className="h-full">
+			<Table className="h-full" aria-label="Workflow executions">
+				<caption className="sr-only">
+					List of workflow executions with their status, credits consumed, and start time
+				</caption>
 				<TableHeader className="bg-muted">
 					<TableRow>
-						<TableHead>Id</TableHead>
-						<TableHead>Status</TableHead>
-						<TableHead>Consumed</TableHead>
-						<TableHead className="text-right">Started at</TableHead>
-						<TableHead className="text-right">Actions</TableHead>
+						<TableHead scope="col">Id</TableHead>
+						<TableHead scope="col">Status</TableHead>
+						<TableHead scope="col">Consumed</TableHead>
+						<TableHead scope="col" className="text-right">Started at</TableHead>
+						<TableHead scope="col" className="text-right">Actions</TableHead>
 					</TableRow>
 				</TableHeader>
 
@@ -82,12 +85,23 @@ function ExecutionsTable({
 						return (
 							<TableRow
 								key={execution.id}
-								className="cursor-pointer"
+								className="cursor-pointer hover:bg-muted/50 focus-within:bg-muted/50"
 								onClick={() => {
 									router.push(
 										`/workflow/runs/${execution.workflowId}/${execution.id}`
 									);
 								}}
+								onKeyDown={e => {
+									if (e.key === "Enter" || e.key === " ") {
+										e.preventDefault();
+										router.push(
+											`/workflow/runs/${execution.workflowId}/${execution.id}`
+										);
+									}
+								}}
+								tabIndex={0}
+								role="link"
+								aria-label={`View execution ${execution.id}, status: ${execution.status}`}
 							>
 								<TableCell>
 									<div className="flex flex-col">
@@ -117,7 +131,7 @@ function ExecutionsTable({
 								<TableCell>
 									<div className="flex flex-col">
 										<div className="flex gap-2 items-center">
-											<CoinsIcon size={16} className="text-primary" />
+											<CoinsIcon size={16} className="text-primary" aria-hidden="true" />
 											<span className="font-semibold capitalize">
 												{execution.creditsConsumed}
 											</span>
@@ -134,8 +148,9 @@ function ExecutionsTable({
 											variant="destructive"
 											size="sm"
 											onClick={e => handleStopExecution(e, execution.id)}
+											aria-label={`Stop execution ${execution.id}`}
 										>
-											<StopCircle className="h-4 w-4 mr-1" />
+											<StopCircle className="h-4 w-4 mr-1" aria-hidden="true" />
 											Stop
 										</Button>
 									)}

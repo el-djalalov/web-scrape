@@ -1,5 +1,4 @@
 import { ExecutionEnvironment } from "@/types/executor";
-import { PageToHtmlTask } from "../task/PageToHtml";
 import { FillInputTask } from "../task/FillInput";
 
 export async function FillInputExecutor(
@@ -9,11 +8,13 @@ export async function FillInputExecutor(
 		const selector = environment.getInput("Selector");
 		if (!selector) {
 			environment.log.error("input->selector not defined");
+			return false;
 		}
 
 		const value = environment.getInput("Value");
 		if (!value) {
 			environment.log.error("input->value not defined");
+			return false;
 		}
 
 		await environment.getPage()!.type(selector, value);

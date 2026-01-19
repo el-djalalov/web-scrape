@@ -36,8 +36,9 @@ function RunBtn({ workflowId }: { workflowId: string }) {
 					workflowId,
 				});
 			}}
+			aria-busy={mutation.isPending}
 		>
-			<PlayIcon size={16} />
+			<PlayIcon size={16} aria-hidden="true" />
 			Run
 		</Button>
 	);

@@ -65,8 +65,9 @@ function DesktopSidebar() {
 								? "bg-primary/10 text-primary font-medium border-l-2 border-primary"
 								: "text-muted-foreground hover:bg-primary/5 hover:text-primary dark:hover:text-white"
 						}`}
+						aria-current={activeRoute.href === route.href ? "page" : undefined}
 					>
-						<route.icon size={20} />
+						<route.icon size={20} aria-hidden="true" />
 
 						<span
 							className={`${
@@ -128,8 +129,8 @@ export function MobileSideBar() {
 			<nav className="container items-center justify-between px-8">
 				<Sheet open={isOpen} onOpenChange={setOpen}>
 					<SheetTrigger asChild>
-						<Button variant={"ghost"}>
-							<MenuIcon />
+						<Button variant={"ghost"} aria-label="Open navigation menu">
+							<MenuIcon aria-hidden="true" />
 						</Button>
 					</SheetTrigger>
 					<SheetContent
@@ -148,8 +149,9 @@ export function MobileSideBar() {
 											? "bg-primary/10 text-white font-medium border-l-2 border-primary"
 											: "text-muted-foreground hover:bg-primary/5 hover:text-white"
 									}`}
+									aria-current={activeRoute.href === route.href ? "page" : undefined}
 								>
-									<route.icon size={20} />
+									<route.icon size={20} aria-hidden="true" />
 									{route.label}
 								</Link>
 							))}

@@ -87,8 +87,9 @@ function DuplicateWorkflowDialog({ workflowId }: { workflowId?: string }) {
 					className={cn(
 						"transition-opacity duration-300 opacity-0 group-hover/card:opacity-100"
 					)}
+					aria-label="Duplicate workflow"
 				>
-					<CopyIcon className="w-4 h-4 text-muted-foreground cursor-pointer" />
+					<CopyIcon className="w-4 h-4 text-muted-foreground cursor-pointer" aria-hidden="true" />
 				</Button>
 			</DialogTrigger>
 			<DialogContent
@@ -160,9 +161,15 @@ function DuplicateWorkflowDialog({ workflowId }: { workflowId?: string }) {
 									</FormItem>
 								)}
 							/>
-							<Button type="submit" className="w-full" disabled={isPending}>
+							<Button
+								type="submit"
+								className="w-full"
+								disabled={isPending}
+								aria-busy={isPending}
+							>
 								{!isPending && "Proceed"}
-								{isPending && <Loader2 className="animate-spin" />}
+								{isPending && <Loader2 className="animate-spin" aria-hidden="true" />}
+								{isPending && <span className="sr-only">Duplicating workflow...</span>}
 							</Button>
 						</form>
 					</Form>

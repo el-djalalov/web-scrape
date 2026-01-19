@@ -14,7 +14,7 @@ export enum TaskType {
 }
 export enum TaskParamType {
 	STRING = "STRING",
-	BROWSER_INTANCE = "BROWSER_INTANCE",
+	BROWSER_INSTANCE = "BROWSER_INSTANCE",
 	SELECT = "SELECT",
 	CREDENTIAL = "CREDENTIAL",
 }

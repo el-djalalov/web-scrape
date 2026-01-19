@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
+import { auth } from "@/auth";
 
 function getStripe() {
 	return new Stripe(process.env.STRIPE_SECRET_KEY!, {
@@ -8,6 +9,15 @@ function getStripe() {
 }
 
 export async function POST(request: NextRequest) {
+	const session = await auth();
+
+	if (!session || !session.user?.id) {
+		return NextResponse.json(
+			{ error: "Unauthorized" },
+			{ status: 401 }
+		);
+	}
+
 	const stripe = getStripe();
 	try {
 		const { amount } = await request.json();
@@ -26,6 +36,9 @@ export async function POST(request: NextRequest) {
 			currency: "usd",
 			automatic_payment_methods: {
 				enabled: true,
+			},
+			metadata: {
+				userId: session.user.id,
 			},
 		});
 		return NextResponse.json({

@@ -29,9 +29,15 @@ export function UserButton() {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
-				<button className="flex items-center gap-2 outline-none">
+				<button
+					className="flex items-center gap-2 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-full"
+					aria-label={`User menu for ${session.user.name || session.user.email}`}
+				>
 					<Avatar className="h-8 w-8 cursor-pointer">
-						<AvatarImage src={session.user.image || undefined} />
+						<AvatarImage
+							src={session.user.image || undefined}
+							alt={`${session.user.name || "User"}'s profile picture`}
+						/>
 						<AvatarFallback>{initials}</AvatarFallback>
 					</Avatar>
 				</button>

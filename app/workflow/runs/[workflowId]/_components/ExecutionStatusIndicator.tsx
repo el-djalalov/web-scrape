@@ -15,7 +15,11 @@ export function ExecutionStatusIndicator({
 	status: WorkflowExecutionStatus;
 }) {
 	return (
-		<div className={cn("w-2 h-2 rounded-full", indicatorColors[status])} />
+		<div
+			className={cn("w-2 h-2 rounded-full", indicatorColors[status])}
+			role="img"
+			aria-label={`Status: ${status.toLowerCase()}`}
+		/>
 	);
 }
 

@@ -69,7 +69,7 @@ export async function ExecuteWorkflow(executionId: string, nextRunAt?: Date) {
 		}
 	}
 
-	await finilizeWorkflowExecution(
+	await finalizeWorkflowExecution(
 		executionId,
 		execution.workflowId,
 		executionFailed,
@@ -81,6 +81,7 @@ export async function ExecuteWorkflow(executionId: string, nextRunAt?: Date) {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
+			"Authorization": `Bearer ${process.env.API_SECRET}`,
 		},
 		body: JSON.stringify({ path: "/workflows/runs" }),
 	});
@@ -125,7 +126,7 @@ async function initializePhasesStatus(execution: ExecutionWithRelations) {
 	});
 }
 
-async function finilizeWorkflowExecution(
+async function finalizeWorkflowExecution(
 	executionId: string,
 	workflowId: string,
 	executionFailed: boolean,
@@ -196,7 +197,7 @@ async function executeWorkflowPhase(
 		success = await executePhase(phase, node, environment, logCollector);
 	}
 	const outputs = environment.phases[node.id].outputs;
-	await finilizePhase(
+	await finalizePhase(
 		phase.id,
 		success!,
 		outputs,
@@ -207,7 +208,7 @@ async function executeWorkflowPhase(
 	return { success, creditsConsumed };
 }
 
-async function finilizePhase(
+async function finalizePhase(
 	phaseId: string,
 	success: boolean,
 	outputs: Record<string, string>,
@@ -266,7 +267,7 @@ function setupEnvironmentForPhase(
 	const inputs = TaskRegistry[node.data.type].inputs;
 
 	for (const input of inputs) {
-		if (input.type === TaskParamType.BROWSER_INTANCE) continue;
+		if (input.type === TaskParamType.BROWSER_INSTANCE) continue;
 		const inputValue = node.data.inputs[input.name];
 		if (inputValue) {
 			environment.phases[node.id].inputs[input.name] = inputValue;

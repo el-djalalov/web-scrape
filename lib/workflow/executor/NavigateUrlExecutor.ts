@@ -1,5 +1,4 @@
 import { ExecutionEnvironment } from "@/types/executor";
-import { ClickElementTask } from "../task/ClickElement";
 import { NavigateUrlTask } from "../task/NavigateUrl";
 
 export async function NavigateUrlExecutor(
@@ -9,6 +8,7 @@ export async function NavigateUrlExecutor(
 		const url = environment.getInput("URL");
 		if (!url) {
 			environment.log.error("input->url not defined");
+			return false;
 		}
 
 		await environment.getPage()!.goto(url);

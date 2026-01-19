@@ -62,21 +62,21 @@ function CreditsPurchase() {
 					value={selectedPack}
 				>
 					{CreditsPacks.map(pack => (
-						<div
+						<Label
 							key={pack.id}
-							className="flex items-center space-x-3 bg-secondary/50 rounded-lg p-3 hover:bg-secondary"
-							onClick={() => setSelectedPack(pack.id)}
+							htmlFor={pack.id}
+							className="flex items-center space-x-3 bg-secondary/50 rounded-lg p-3 hover:bg-secondary cursor-pointer"
 						>
 							<RadioGroupItem value={pack.id} id={pack.id} />
-							<Label className="flex justify-between w-full cursor-pointer">
+							<span className="flex justify-between w-full">
 								<span className="font-medium">
 									{pack.name} - {pack.label}
 								</span>
 								<span className="font-bold text-muted-foreground">
 									$ {(pack.price / 100).toFixed(2)}
 								</span>
-							</Label>
-						</div>
+							</span>
+						</Label>
 					))}
 				</RadioGroup>
 			</CardContent>

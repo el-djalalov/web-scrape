@@ -143,7 +143,7 @@ function FlowEditor({ workflow }: { workflow: Workflow }) {
 	);
 
 	return (
-		<main className="h-full w-full">
+		<main className="h-full w-full" aria-label="Workflow editor canvas">
 			<ReactFlow
 				nodes={nodes}
 				edges={edges}
@@ -159,8 +159,13 @@ function FlowEditor({ workflow }: { workflow: Workflow }) {
 				onDrop={onDrop}
 				onConnect={onConnect}
 				isValidConnection={isValidConnection}
+				aria-label={`Workflow with ${nodes.length} nodes and ${edges.length} connections`}
 			>
-				<Controls position="top-left" fitViewOptions={fitViewOptions} />
+				<Controls
+					position="top-left"
+					fitViewOptions={fitViewOptions}
+					aria-label="Workflow zoom and pan controls"
+				/>
 				<Background variant={BackgroundVariant.Dots} gap={12} size={1} />
 			</ReactFlow>
 		</main>
